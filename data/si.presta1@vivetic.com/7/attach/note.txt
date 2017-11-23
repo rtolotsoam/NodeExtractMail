@@ -1,0 +1,71 @@
+select set_idcommande ('VOF790',147)
+
+-------------- pas de sous dossier
+
+INSERT INTO commande(
+            idcommande, naturecmd, iddevis, idclient, matriculecp, codeflag, 
+            refbcclient, daterefbcclient, daterecptprevue, datelivraisonprevue, 
+            adresselivraison, commentcmd, flaggpao, nbetapecmd, matriculemet, 
+            adressefacturation, matcreateur, matcloture, datecreation, datecloture, 
+            datesreouverture, hrcreation, matsupplcp, hrlivraisonprevue, 
+            pwdcmd, ordreprioritecmd, titrecmd, volumecmdprevu, idunitevolume, 
+            refdeviscmd, datedeviscmd, prestationcmd, idmodelivraison, datedebprevnum, 
+            datefinprevnum, datedebprevrecept, datefinprevrecept, idcontact, 
+            destinatairelivraison, matriculecomm, refcegid, flagrecurrence, 
+            ancien_nom, periode, tif, taux, datemisesite, code3, dureearchive, 
+            cmd_cmdtypeid, cmd_cmdtechid, cmd_prevqte, jalongpao, cmd_unite, 
+            cmd_livrmode, flaglivraison, pt_com_avec_sdos, pt_com_avec_volume)
+            
+select '0SNF298', naturecmd, iddevis, idclient, matriculecp, codeflag, 
+            refbcclient, daterefbcclient, daterecptprevue, datelivraisonprevue, 
+            adresselivraison, commentcmd, flaggpao, nbetapecmd, matriculemet, 
+            adressefacturation, matcreateur, matcloture, datecreation, datecloture, 
+            datesreouverture, hrcreation, matsupplcp, hrlivraisonprevue, 
+            pwdcmd, ordreprioritecmd, titrecmd, volumecmdprevu, idunitevolume, 
+            refdeviscmd, datedeviscmd, prestationcmd, idmodelivraison, datedebprevnum, 
+            datefinprevnum, datedebprevrecept, datefinprevrecept, idcontact, 
+            destinatairelivraison, matriculecomm, refcegid, flagrecurrence, 
+            ancien_nom, periode, tif, taux, datemisesite, code3, dureearchive, 
+            cmd_cmdtypeid, cmd_cmdtechid, cmd_prevqte, jalongpao, cmd_unite, 
+            cmd_livrmode, flaglivraison, pt_com_avec_sdos, pt_com_avec_volume from commande where idcommande ='0SNF297'
+
+
+
+INSERT INTO passe(
+            idetape, idcommande, datedebpasse, datefinpasse, objectif, ordre, 
+            iddept, objqual, idsousdossier, matriculeresp, dateintro, ippasse, 
+            tableprod, n_decoupage, etapecq, derniereetape, objectifcp, objectif_bav, 
+            objectif_final, date_validation, matr_valideur)
+
+SELECT idetape,'RXE004', datedebpasse, datefinpasse, objectif, ordre, 
+       iddept, objqual, idsousdossier, matriculeresp, dateintro, ippasse, 
+       tableprod, n_decoupage, etapecq, derniereetape, objectifcp, objectif_bav, 
+       objectif_final, date_validation, matr_valideur
+  FROM passe
+  where idcommande = 'RXE003' AND idetape != 'SAISIE 1'
+  
+********************* VERIFIECATION ****************
+  
+select * from commande where idcommande ='BLF327'
+
+select * from passe where idcommande ='BLF327'
+
+select * from sousdossier where idcommande ='0SNF297'
+
+
+
+********************** AVEC SOUS DOSSIER *******************************
+
+INSERT INTO sousdossier(
+            idsousdossier, idcommande, rqssdos, ssdosparent, code3, pt_sdos_avec_volume, 
+            qrcode, barrecode, checkpageblanche, wp_detect_resize_level, 
+            wp_detect_fuzz_level)
+
+SELECT idsousdossier, '0SNF298', rqssdos, ssdosparent, code3, pt_sdos_avec_volume, 
+       qrcode, barrecode, checkpageblanche, wp_detect_resize_level, 
+       wp_detect_fuzz_level
+  FROM sousdossier
+  WHERE idcommande = '0SNF297'
+
+
+
