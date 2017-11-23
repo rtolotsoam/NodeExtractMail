@@ -164,7 +164,7 @@ function extractInbox(mailConfig) {
                                         Données à insérer dans inbox
                                          */
                                         var donneesInsert = {
-                                            url: 'http://localhost:8080/api/insertinbox',
+                                            url: 'http://localhost:3000/api/insertinbox',
                                             method: 'POST',
                                             headers: headers,
                                             form: {
@@ -221,7 +221,7 @@ function extractInbox(mailConfig) {
                                                     Données à insérer dans attachment
                                                      */
                                                     var donneesAttach = {
-                                                        url: 'http://localhost:8080/api/insertattachment',
+                                                        url: 'http://localhost:3000/api/insertattachment',
                                                         method: 'POST',
                                                         headers: headers,
                                                         form: {
@@ -277,7 +277,7 @@ function extractInbox(mailConfig) {
                                         Données à insérer dans inbox
                                          */
                                         var donneesInsert = {
-                                            url: 'http://localhost:8080/api/insertinboxcc',
+                                            url: 'http://localhost:3000/api/insertinboxcc',
                                             method: 'POST',
                                             headers: headers,
                                             form: {
@@ -336,7 +336,7 @@ function extractInbox(mailConfig) {
                                                     Données à insérer dans attachment
                                                      */
                                                     var donneesAttach = {
-                                                        url: 'http://localhost:8080/api/insertattachment',
+                                                        url: 'http://localhost:3000/api/insertattachment',
                                                         method: 'POST',
                                                         headers: headers,
                                                         form: {
