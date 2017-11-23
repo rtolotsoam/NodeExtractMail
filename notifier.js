@@ -8,8 +8,8 @@ var imap1 = {
     host: 'mail.vivetic.com',
     port: 143,
     tls: false,
-    markSeen: false,
-    debug: console.log
+    markSeen: false//,
+    //debug: console.log
   };
 var imap2 = {
     user: 'si.presta2@vivetic.com',
@@ -17,8 +17,8 @@ var imap2 = {
     host: 'mail.vivetic.com',
     port: 143,
     tls: false,
-    markSeen: false,
-    debug: console.log
+    markSeen: false//,
+    //debug: console.log
   };
 var imap3 = {
     user: 'si.presta3@vivetic.com',
@@ -26,8 +26,8 @@ var imap3 = {
     host: 'mail.vivetic.com',
     port: 143,
     tls: false,
-    markSeen: false,
-    debug: console.log
+    markSeen: false//,
+    //debug: console.log
   };
 
 
@@ -40,12 +40,13 @@ imaps[3] = imap3;
 
 var test = true;
 
-function asyncNotifier(n){
+function asyncNotifier(){
     return new Promise(
         function(resolve, reject){
             if(test){
-                extract.extractInbox(imaps[n]);
+                          
                 resolve(execute);
+                
             }else{
                 reject(err);
             }
@@ -53,40 +54,45 @@ function asyncNotifier(n){
     );
 }
 
+var started = true;
+
+function toggleState(notify){
+  if(started){
+    notify.stop();
+  }else{
+    notify.start();
+  }
+  started = !started;
+  setTimeout(toggleState,5000, notify);
+}
+
+
 var execute=0;
 
+while (execute < imaps.length - 1) {
+    execute++;
+    asyncNotifier()
+    .then(j=>{
+        var n  = notifier(imaps[j]).on('mail', function(mail){
+                      extract.extractInbox(imaps[j]);
+                    });
 
-notifier(imaps[1]).on('mail',function(mail){
-    execute++;
-    asyncNotifier(1)
-    .then(j=>{
-        console.log('==================> ### notify1 ### <=========================');
-        console.log('==================>    notify1 num :'+ j +'  <============================');
+        n.on('end',function(){
+          console.log('...Fin notification'+ j +'...');
+        });
+
+        n.on('error',function(err){
+          console.log('...Error notification'+ j +' : %s', err);
+        });
+
+        n.start();
+
+        setTimeout(toggleState,3000, n);
+        
     })
     .catch(error=>{
-        console.log('#error : notify1, execute'+j);
+        console.log('#error : Notification');
     });
-	
-}).start();
-notifier(imaps[2]).on('mail',function(mail){
-    execute++;
-    asyncNotifier(2)
-    .then(j=>{
-        console.log('==================> ### notify2 ### <=========================');
-        console.log('==================>    notify2 num :'+ j +'  <============================');
-    })
-    .catch(error=>{
-        console.log('#error : notify2, execute'+j);
-    });
-}).start();
-notifier(imaps[3]).on('mail',function(mail){
-    execute++;
-    asyncNotifier(3)
-    .then(j=>{
-        console.log('==================> ### notify3 ### <=========================');
-        console.log('==================>    notify3 num :'+ j +'  <============================');
-    })
-    .catch(error=>{
-        console.log('#error : notify3, execute'+j);
-    });
-}).start();
+}
+
+
