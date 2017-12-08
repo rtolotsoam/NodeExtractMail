@@ -157,7 +157,8 @@ function extractInbox(mailConfig) {
                                         fs.mkdirSync(dirmail); // création du répertoire pour enregistrer les mail (tomail/uid)
                                         var filename = dirmail + '/' + seqno + '.html'; //  le corp du mail est enregistrer en format uid.html
                                         var bodystream = fs.createWriteStream(filename);
-                                        bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
+                                        //bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
+                                        bodystream.write(mail.html);
                                         bodystream.end();
                                         console.log('======================> saved simple<=================');
                                         /*
@@ -270,7 +271,8 @@ function extractInbox(mailConfig) {
                                         fs.mkdirSync(dirmail); // création du répertoire pour enregistrer les mail (tomail/uid)
                                         var filename = dirmail + '/' + seqno + '.html'; //  le corp du mail est enregistrer en format uid.html
                                         var bodystream = fs.createWriteStream(filename);
-                                        bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
+                                        //bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
+                                        bodystream.write(mail.html);
                                         bodystream.end();
                                         console.log('======================> saved simple<=================');
                                         /*

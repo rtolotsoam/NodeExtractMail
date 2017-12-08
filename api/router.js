@@ -20,7 +20,7 @@ router.get('/', function(req, res, next) {
 /*
 Route pour model user
  */
-var modeluser = require('./usermodel'); 
+var modeluser = require('./user.model'); 
 
 router.get('/api/listusers', modeluser.getAllUsers);
 router.get('/api/user/:id', modeluser.getUser);
@@ -28,7 +28,7 @@ router.get('/api/user/:id', modeluser.getUser);
 /*
 Route pour model inbox
  */
-var modelinbox = require('./inboxmodel'); 
+var modelinbox = require('./inbox.model'); 
 
 router.post('/api/insertinbox', modelinbox.insertInbox);
 router.post('/api/insertinboxcc', modelinbox.insertInboxCC);
@@ -36,7 +36,7 @@ router.post('/api/insertinboxcc', modelinbox.insertInboxCC);
 /*
 Route pour model attachment
  */
-var modelattachemnt = require('./attachmentmodel');
+var modelattachemnt = require('./attachment.model');
 router.post('/api/insertattachment', modelattachemnt.insertAttachment);
 
 module.exports = router;
