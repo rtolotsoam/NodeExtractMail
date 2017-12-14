@@ -17,26 +17,40 @@ router.get('/', function(req, res, next) {
 //////////////////////
 
 
-/*
-Route pour model user
+/**
+ * Route pour le model : user.model.js
+ * @type {[type]}
  */
 var modeluser = require('./user.model'); 
 
 router.get('/api/listusers', modeluser.getAllUsers);
 router.get('/api/user/:id', modeluser.getUser);
+router.put('/api/userupdate/:id', modeluser.updateUser);
+router.post('/api/adduser', modeluser.insertUser);
 
-/*
-Route pour model inbox
+/**
+ * Route pour le model : inbox.model.js
+ * @type {[type]}
  */
 var modelinbox = require('./inbox.model'); 
 
 router.post('/api/insertinbox', modelinbox.insertInbox);
 router.post('/api/insertinboxcc', modelinbox.insertInboxCC);
 
-/*
-Route pour model attachment
+/**
+ * Route pour le model : attachment.model.js
+ * @type {[type]}
  */
 var modelattachemnt = require('./attachment.model');
 router.post('/api/insertattachment', modelattachemnt.insertAttachment);
+
+
+/**
+ * Route pour le model : level.model.js
+ * @type {[type]}
+ */
+var modellevel = require('./level.model');
+
+router.get('/api/listlevel', modellevel.getAllLevel);
 
 module.exports = router;

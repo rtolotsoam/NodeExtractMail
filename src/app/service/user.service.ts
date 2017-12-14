@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import {User} from "../service/user";
-import {Headers, Http} from '@angular/http';
+import { Level } from "../service/level";
+import { User } from "../service/user";
+import { Headers, Http } from '@angular/http';
 
 @Injectable()
 export class UserService {
@@ -19,12 +20,23 @@ export class UserService {
   	getAllUsers(): Promise<User[]> {
   		const url = `${this.api}/listusers`;
 	    return this.http.get(url)
-	      .toPromise()
-	      .then(response => {
-	        return response.json() as User[];
-	      })
-	      .catch(this.handleError);
+	    	.toPromise()
+	    	.then(response => { return response.json() as User[]; })
+	    	.catch(this.handleError);
 	}
+
+	/**
+	 * Pour récupérer tous les level de la table level
+	 * @return {Promise<Level[]>} [description]
+	 */
+	getAllLevel(): Promise<Level[]>{
+		const url = `${this.api}/listlevel`;
+
+		return this.http.get(url)
+			.toPromise()
+			.then(response => { return response.json() as Level[]; })
+			.catch(this.handleError);
+	} 
 
 	/**
 	 * Pour récupérer un utilisateur avec son ID
@@ -34,9 +46,34 @@ export class UserService {
 	getUser(id_user: string) : Promise<User>{
 		const url = `${this.api}/user/${id_user}`;
 	    return this.http.get(url)
-	      .toPromise()
-	      .then(response => response.json() as User)
-	      .catch(this.handleError);
+	    	.toPromise()
+	    	.then(response => response.json() as User)
+	    	.catch(this.handleError);
+	}
+
+	/**
+	 * Pour mettre à jour un utilisateur
+	 * @param  {User}          user [description]
+	 * @return {Promise<User>}      [description]
+	 */
+	update(user: User): Promise<User>{
+		return this.http.put(`${this.api}/userupdate/${user.id_user}`, JSON.stringify(user), {headers: this.headers})
+			.toPromise()
+			.then(response => response.json() as User)
+			.catch(this.handleError);
+	}
+
+	/**
+	 * Pour insérer les utilisateur dans la table user
+	 * @param  {User}          user [description]
+	 * @return {Promise<User>}      [description]
+	 */
+	add(user: User): Promise<User>{
+		const url = `${this.api}/api/adduser`;
+		return this.http.post(url, JSON.stringify(user), {headers : this.headers})
+			.toPromise()
+			.then(response => response.json() as User)
+			.catch(this.handleError);
 	}
 
 	/**
@@ -48,5 +85,7 @@ export class UserService {
 	    console.error('Une erreur est survenue : ', error); 
 	    return Promise.reject(error.message || error);
 	}
+
+
 
 }

@@ -1,0 +1,77 @@
+<div class="col-md-offset-3 col-md-6" *ngIf="user">
+	<div class="panel panel-default">
+		<div class="row" style="margin: 0">
+			<div class="col-md-12 text-center form-header">
+				<h4>Mettre à jour les détails utilisateur</h4>
+			</div>
+		</div>
+		<div class="panel-body">
+			<form [formGroup]="userUpdateForm"
+				(ngSubmit)="update()"
+				novalidate>
+				<div class="form-group">
+					<label for="prenom">Prénom</label>
+					<input id="prenom" 
+					type="text"
+					class="form-control" 
+					formControlName="prenom" autocomplete="off">
+					<div [hidden]="userUpdateForm.get('prenom').valid || userUpdateForm.get('prenom').pritisme" class="alert alert-danger">
+						Le prénom est requis et doit contenir au maximum 50 caractéres, au minimu 3 caractéres.
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="matricule">Matricule</label>
+					<input id="matricule"  
+					type="text"
+					class="form-control"
+					formControlName="matricule" autocomplete="off">
+					<div [hidden]="userUpdateForm.get('matricule').valid || userUpdateForm.get('matricule').pritisme" class="alert alert-danger">
+						Le matricule est requis et doit contenir que des nombres au minimum 2 nombres
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="mail">Adresse E-mail</label>
+					<input id="mail"
+					type="email"
+					class="form-control"
+					formControlName="mail" autocomplete="off">
+					<div [hidden]="userUpdateForm.get('mail').valid || userUpdateForm.get('mail').pritisme" class="alert alert-danger">
+						L'adresse E-mail est requis ou invalide
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="level">Level</label>
+					<select id="level"
+					class="form-control"
+					[(ngModel)]="user.idlevel"
+					formControlName="level">
+						<option [value]="user.idlevel" [selected]="true" disabled>
+							{{ user.level }}
+						</option>
+						<option *ngFor="let lvl of level" 
+						[value]="lvl.id_level">
+		                 	{{ lvl.name }}
+		               	</option>
+					</select>
+				</div>
+				<div class="form-group">
+					<label for="password">Mot de passe</label>
+					<input id="password"
+					type="text"
+					class="form-control"
+					formControlName="password" autocomplete="off">
+					<div [hidden]="userUpdateForm.get('password').valid || userUpdateForm.get('password').pritisme" class="alert alert-danger">
+						Le mot de passe est requis et doit contenir 8 caractéres au minimum
+					</div>
+				</div>
+				<div class="form-group">
+					<button class="btn btn-success"
+					type="submit"
+					[disabled]="!userUpdateForm.valid">Modifier
+					</button>
+					<button type="button" class="btn btn-default" (click)="goBack()">Annuler</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

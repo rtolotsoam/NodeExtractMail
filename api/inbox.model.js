@@ -32,16 +32,17 @@ function insertInboxCC(req, res, next) {
       'values(${cc}, ${subject}, ${frommail}, ${tomail}, ${uidmail}, ${dateservermail}, ${fromname}, ${dateservermailformat}, ${tomailcc}, ${flagcc}) RETURNING id_inbox',
     req.body)
     .then(data => {
+      
       res.status(200)
-        .json({
-          status: 'success',
-          id_inbox : data.id_inbox,
-          message: 'Inserted one inbox'
-        });
-    })
+      .json({
+        status: 'success',
+        id_inbox : data.id_inbox,
+        message: 'Inserted one inbox'
+      });
+  })
     .catch(function (err) {
       return next(err);
-    });
+  });
 }
 
 /////////////

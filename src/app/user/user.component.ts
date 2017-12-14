@@ -34,8 +34,12 @@ export class UserComponent implements OnInit {
   		this.getAllUsers();
   	}
 
+    update(id: string): void {
+      this.router.navigate(['/updateuser', id]);
+    }
+
   	viewDetail(id: string): void {
-	    this.router.navigate(['/detail', id]);
+	    this.router.navigate(['/detailuser', id]);
 	}
 
 

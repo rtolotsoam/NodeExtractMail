@@ -3,4 +3,7 @@ export class User {
 	matricule : number;
 	mail : string;
 	password : string;
+	level : string;
+	prenom : string;
+	idlevel? : number; 
 }

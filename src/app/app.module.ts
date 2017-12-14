@@ -13,6 +13,8 @@ import { LoginComponent } from './login/login.component';
 // Service
 import { UserService } from './service/user.service';
 import { UserDetailComponent } from './user/user-detail/user-detail.component';
+import { UserUpdateComponent } from './user/user-update/user-update.component';
+import { UserAddComponent } from './user/user-add/user-add.component';
 
 
 @NgModule({
@@ -20,7 +22,9 @@ import { UserDetailComponent } from './user/user-detail/user-detail.component';
     AppComponent,
     UserComponent,
     LoginComponent,
-    UserDetailComponent
+    UserDetailComponent,
+    UserUpdateComponent,
+    UserAddComponent
   ],
   imports: [
     BrowserModule,

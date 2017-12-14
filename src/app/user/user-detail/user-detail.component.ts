@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../service/user';
-import {ActivatedRoute, Params} from '@angular/router';
-import {Location} from '@angular/common';
-import {UserService} from "../../service/user.service";
+import { ActivatedRoute, Params } from '@angular/router';
+import { Location } from '@angular/common';
+import { UserService } from "../../service/user.service";
 import 'rxjs/add/operator/switchMap';
 
 @Component({
@@ -28,6 +28,6 @@ export class UserDetailComponent implements OnInit {
 
   	goBack(): void{
 	    this.location.back();
-	}
+	  }
 
 }
