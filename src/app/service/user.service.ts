@@ -69,7 +69,7 @@ export class UserService {
 	 * @return {Promise<User>}      [description]
 	 */
 	add(user: User): Promise<User>{
-		const url = `${this.api}/api/adduser`;
+		const url = `${this.api}/adduser`;
 		return this.http.post(url, JSON.stringify(user), {headers : this.headers})
 			.toPromise()
 			.then(response => response.json() as User)

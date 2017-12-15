@@ -119,15 +119,16 @@ function updateUser(req, res, next) {
  */
 function insertUser(req, res, next){
   var pass = crypt.encrypt(req.body.password);
-  db.none('INSERT INTO user(matricule, mail, password, prenom, level_id)' +
-      'values($1, $2, $3, $4, $5)', [req.body.matricule, req.body.mail, pass, req.body.prenom, req.body.level])
-  .then(
+
+  db.none('INSERT INTO users(matricule, mail, password, prenom, level_id)'+
+    ' values($1, $2, $3, $4, $5)', [req.body.matricule, req.body.mail, pass, req.body.prenom, parseInt(req.body.level)])
+  .then(function() {
     res.status(200)
     .json({
       status: 'success',
       message: 'Inserted one user'
     });
-  )
+  })
   .catch(function(err){
     return next(err);
   });

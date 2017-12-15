@@ -58,8 +58,8 @@ export class UserUpdateComponent implements OnInit {
     }
 
   	goBack(): void{
-	   this.location.back();
-	}
+	    this.location.back();
+	  }
 
 
 }
