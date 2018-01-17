@@ -1,6 +1,8 @@
-var express = require('express');
-var router = express.Router();
+'use strict'
 
+var express   = require('express');
+var router    = express.Router();
+var token = require('./security');
 
 // http://localhost:3000/
 router.get('/', function(req, res, next) {
@@ -16,17 +18,17 @@ router.get('/', function(req, res, next) {
 // Postgres queries
 //////////////////////
 
-
 /**
  * Route pour le model : user.model.js
  * @type {[type]}
  */
 var modeluser = require('./user.model'); 
 
-router.get('/api/listusers', modeluser.getAllUsers);
-router.get('/api/user/:id', modeluser.getUser);
-router.put('/api/userupdate/:id', modeluser.updateUser);
-router.post('/api/adduser', modeluser.insertUser);
+router.post('/api/login', modeluser.getUserLogin);
+router.get('/api/listusers', token.verifyToken, modeluser.getAllUsers);
+router.get('/api/user/:id', token.verifyToken, modeluser.getUser);
+router.put('/api/userupdate/:id', token.verifyToken, modeluser.updateUser);
+router.post('/api/adduser', token.verifyToken, modeluser.insertUser);
 
 /**
  * Route pour le model : inbox.model.js
@@ -51,6 +53,6 @@ router.post('/api/insertattachment', modelattachemnt.insertAttachment);
  */
 var modellevel = require('./level.model');
 
-router.get('/api/listlevel', modellevel.getAllLevel);
+router.get('/api/listlevel', token.verifyToken, modellevel.getAllLevel);
 
 module.exports = router;

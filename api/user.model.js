@@ -1,7 +1,9 @@
-'use strict';
+'use strict'
 
-var db = require('./conn.js');
-var crypt = require('./crypt');
+var db          = require('./conn');
+var crypt       = require('./crypt');
+const jwt       = require('jsonwebtoken');
+const jwtconfig = require('./../jwtconfig');
 
 /////////////////////
 // Query Functions
@@ -16,31 +18,75 @@ var crypt = require('./crypt');
  * @return {[type]}        [description]
  */
 function getAllUsers(req, res, next) {
-  db.any('SELECT * FROM users')
+
+    db.any('SELECT * FROM users INNER JOIN level as lv ON users.level_id = lv.id_level')
     .then(function (data) {
-      var db_data = [];
-      for(var i = 0; i < data.length; i++){
-          //console.log(data[i].id_user);
-          db_data[i] = {
-              id_user : data[i].id_user,
-              matricule : data[i].matricule,
-              mail : data[i].mail,
-              password : crypt.decrypt(data[i].password),
-              prenom : data[i].prenom,
-              level : data[i].level_id
-          };
-      }
+          
+          var db_data = [];
+          for(var i = 0; i < data.length; i++){
+               
+                db_data[i] = {
+                    id_user : data[i].id_user,
+                    matricule : data[i].matricule,
+                    mail : data[i].mail,
+                    password : crypt.decrypt(data[i].password),
+                    prenom : data[i].prenom,
+                    level : data[i].name,
+                    idlevel : data[i].level_id
+                };
 
-      res.status(200)
-      .json({
-          data : db_data
-      });
+          }
 
+        res.status(200)
+        .json({
+            data : db_data
+        });
         
     })
     .catch(function (err) {
       return next(err);
     });
+}
+
+
+
+function getUserLogin(req, res, next) {
+  var pass = crypt.encrypt(req.body.password);
+
+  console.log(req);
+
+  db.one('SELECT * FROM users INNER JOIN level as lv ON users.level_id = lv.id_level WHERE matricule = $1 AND password = $2', 
+    [ req.body.matricule, pass ])
+  .then(function (data) {
+
+      var payload = {
+          matricule : data.matricule
+      }
+
+      var token = jwt.sign(payload, jwtconfig.secret, {
+            expiresIn : 86400
+      });
+
+      var  db_data = {
+                    id_user : data.id_user,
+                    matricule : data.matricule,
+                    mail : data.mail,
+                    password : crypt.decrypt(data.password),
+                    prenom : data.prenom,
+                    level : data.name,
+                    idlevel : data.level_id
+                };
+
+      res.status(200)
+      .json({
+          data: db_data,
+          token : token
+      });
+
+  })
+  .catch(function(err){
+      return err.received;
+  });
 }
 
 
@@ -141,6 +187,7 @@ function insertUser(req, res, next){
 
 module.exports = {
     getAllUsers: getAllUsers,
+    getUserLogin : getUserLogin,
     getUser : getUser,
     updateUser : updateUser,
     insertUser : insertUser

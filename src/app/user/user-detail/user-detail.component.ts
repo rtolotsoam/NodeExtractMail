@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { User } from '../../service/user';
 import { ActivatedRoute, Params } from '@angular/router';
+import {Router} from '@angular/router';
 import { Location } from '@angular/common';
 import { UserService } from "../../service/user.service";
 import 'rxjs/add/operator/switchMap';
@@ -17,7 +18,8 @@ export class UserDetailComponent implements OnInit {
   	constructor(
   		private userService: UserService,
    		private route: ActivatedRoute,
-    	private location: Location
+    	private location: Location,
+      private router: Router
   	) { };
 
   	ngOnInit(): void {
@@ -27,7 +29,8 @@ export class UserDetailComponent implements OnInit {
   	}
 
   	goBack(): void{
-	    this.location.back();
+	    this.router.navigate(['/user']);
+      //this.location.back();
 	  }
 
 }

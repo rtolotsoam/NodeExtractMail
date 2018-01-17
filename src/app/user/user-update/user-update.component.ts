@@ -58,7 +58,8 @@ export class UserUpdateComponent implements OnInit {
     }
 
   	goBack(): void{
-	    this.location.back();
+	    this.router.navigate(['/user']);
+      //this.location.back();
 	  }
 
 

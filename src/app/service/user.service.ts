@@ -2,16 +2,25 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
 import { Level } from "../service/level";
 import { User } from "../service/user";
-import { Headers, Http } from '@angular/http';
+import { Headers, Http, RequestOptions } from '@angular/http';
+
+//import { AuthService } from "../auth.service";/
+
 
 @Injectable()
 export class UserService {
 
 	private host    = window.location.hostname;
+	private token = JSON.parse(localStorage.getItem('currentUser'));
 	private headers = new Headers({'Content-Type': 'application/json'});
+	private headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
 	private api     = `http://${this.host}:3000/api`;
+	private options = new RequestOptions({ headers: this.headers_token });
 
-  	constructor(private http: Http) { };
+  	constructor(
+  		private http: Http//,
+  		//private authService : AuthService
+  	) {};
 
   	/**
   	 * Pour récupérer tous les utilisateurs
@@ -19,10 +28,25 @@ export class UserService {
   	 */
   	getAllUsers(): Promise<User[]> {
   		const url = `${this.api}/listusers`;
-	    return this.http.get(url)
+	    return this.http.get(url, this.options)
 	    	.toPromise()
 	    	.then(response => { return response.json() as User[]; })
 	    	.catch(this.handleError);
+	}
+
+	/**
+	 * Pour récuprérer l'utilisateur logger
+	 * @param  {number}        matricule [description]
+	 * @param  {string}        password  [description]
+	 * @return {Promise<User>}           [description]
+	 */
+	getUserLogin(matricule: number, password: string): Promise<User> {
+		const url = `${this.api}/login`;
+
+		return this.http.post(url, JSON.stringify({ matricule: matricule, password: password }), {headers : this.headers})
+		.toPromise()
+		.then(response => response.json() as User)
+		.catch(this.handleError);
 	}
 
 	/**
@@ -32,7 +56,7 @@ export class UserService {
 	getAllLevel(): Promise<Level[]>{
 		const url = `${this.api}/listlevel`;
 
-		return this.http.get(url)
+		return this.http.get(url, this.options)
 			.toPromise()
 			.then(response => { return response.json() as Level[]; })
 			.catch(this.handleError);
@@ -45,7 +69,7 @@ export class UserService {
 	 */
 	getUser(id_user: string) : Promise<User>{
 		const url = `${this.api}/user/${id_user}`;
-	    return this.http.get(url)
+	    return this.http.get(url, this.options)
 	    	.toPromise()
 	    	.then(response => response.json() as User)
 	    	.catch(this.handleError);
@@ -57,7 +81,7 @@ export class UserService {
 	 * @return {Promise<User>}      [description]
 	 */
 	update(user: User): Promise<User>{
-		return this.http.put(`${this.api}/userupdate/${user.id_user}`, JSON.stringify(user), {headers: this.headers})
+		return this.http.put(`${this.api}/userupdate/${user.id_user}`, JSON.stringify(user), { headers: this.headers_token })
 			.toPromise()
 			.then(response => response.json() as User)
 			.catch(this.handleError);
@@ -70,7 +94,8 @@ export class UserService {
 	 */
 	add(user: User): Promise<User>{
 		const url = `${this.api}/adduser`;
-		return this.http.post(url, JSON.stringify(user), {headers : this.headers})
+
+		return this.http.post(url, JSON.stringify(user), {headers : this.headers_token})
 			.toPromise()
 			.then(response => response.json() as User)
 			.catch(this.handleError);

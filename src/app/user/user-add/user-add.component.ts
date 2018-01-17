@@ -54,7 +54,8 @@ export class UserAddComponent {
     }
 
     goBack(): void{
-    	this.location.back();
+    	this.router.navigate(['/user']);
+      //this.location.back();
   	}
 
 
