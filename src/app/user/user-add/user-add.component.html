@@ -1,77 +1,91 @@
-<div class="col-md-offset-3 col-md-6" *ngIf="user">
-	<div class="panel panel-default">
-		<div class="row" style="margin: 0">
-			<div class="col-md-12 text-center form-header">
-				<h4>Ajouter un nouvel utilisateur</h4>
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>	
+
+		<div class="row">	
+			<div class="col-md-offset-3 col-md-6" *ngIf="user">
+				<div class="panel panel-default">
+					<div class="row">
+						<div class="col-md-12 text-center form-header"  style="margin-top: 15px;">
+							<h4>Ajouter un nouvel utilisateur</h4>
+						</div>
+					</div>
+					<div class="panel-body">
+						<form [formGroup]="userAddForm"
+							(ngSubmit)="add()"
+							novalidate>
+							<div class="form-group">
+								<label for="prenom">Prénom</label>
+								<input id="prenom" 
+								type="text"
+								class="form-control" 
+								formControlName="prenom" autocomplete="off">
+								<div [hidden]="userAddForm.get('prenom').valid || userAddForm.get('prenom').untouched" class="alert alert-danger">
+									Le prénom est requis et doit contenir au maximum 50 caractéres, au minimu 3 caractéres.
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="matricule">Matricule</label>
+								<input id="matricule"  
+								type="text"
+								class="form-control"
+								formControlName="matricule" autocomplete="off">
+								<div [hidden]="userAddForm.get('matricule').valid || userAddForm.get('matricule').untouched" class="alert alert-danger">
+									Le matricule est requis et doit contenir que des nombres au minimum 2 nombres
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="mail">Adresse E-mail</label>
+								<input id="mail"
+								type="email"
+								class="form-control"
+								formControlName="mail" autocomplete="off">
+								<div [hidden]="userAddForm.get('mail').valid || userAddForm.get('mail').untouched" class="alert alert-danger">
+									L'adresse E-mail est requis ou invalide
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="level">Level</label>
+								<select id="level"
+								class="form-control"
+								formControlName="level">
+									<option value="" disabled>Merci de choisir parmi les options</option>
+									<option *ngFor="let lvl of level" 
+									[value]="lvl.id_level">
+					                 	{{ lvl.name }}
+					               	</option>
+								</select>
+								<div [hidden]="userAddForm.get('level').valid || userAddForm.get('level').untouched" class="alert alert-danger">
+									Le champs level est obligatoire
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="password">Mot de passe</label>
+								<input id="password"
+								type="password"
+								class="form-control"
+								formControlName="password" autocomplete="off">
+								<div [hidden]="userAddForm.get('password').valid || userAddForm.get('password').untouched" class="alert alert-danger">
+									Le mot de passe est requis et doit contenir 8 caractéres au minimum
+								</div>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-success"
+								type="submit"
+								[disabled]="!userAddForm.valid">Ajouter
+								</button>
+								<button type="button" class="btn btn-default" (click)="goBack()">Annuler</button>
+							</div>
+						</form>
+					</div>
+				</div>
 			</div>
 		</div>
-		<div class="panel-body">
-			<form [formGroup]="userAddForm"
-				(ngSubmit)="add()"
-				novalidate>
-				<div class="form-group">
-					<label for="prenom">Prénom</label>
-					<input id="prenom" 
-					type="text"
-					class="form-control" 
-					formControlName="prenom" autocomplete="off">
-					<div [hidden]="userAddForm.get('prenom').valid || userAddForm.get('prenom').untouched" class="alert alert-danger">
-						Le prénom est requis et doit contenir au maximum 50 caractéres, au minimu 3 caractéres.
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="matricule">Matricule</label>
-					<input id="matricule"  
-					type="text"
-					class="form-control"
-					formControlName="matricule" autocomplete="off">
-					<div [hidden]="userAddForm.get('matricule').valid || userAddForm.get('matricule').untouched" class="alert alert-danger">
-						Le matricule est requis et doit contenir que des nombres au minimum 2 nombres
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="mail">Adresse E-mail</label>
-					<input id="mail"
-					type="email"
-					class="form-control"
-					formControlName="mail" autocomplete="off">
-					<div [hidden]="userAddForm.get('mail').valid || userAddForm.get('mail').untouched" class="alert alert-danger">
-						L'adresse E-mail est requis ou invalide
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="level">Level</label>
-					<select id="level"
-					class="form-control"
-					formControlName="level">
-						<option value="" disabled>Merci de choisir parmi les options</option>
-						<option *ngFor="let lvl of level" 
-						[value]="lvl.id_level">
-		                 	{{ lvl.name }}
-		               	</option>
-					</select>
-					<div [hidden]="userAddForm.get('level').valid || userAddForm.get('level').untouched" class="alert alert-danger">
-						Le champs level est obligatoire
-					</div>
-				</div>
-				<div class="form-group">
-					<label for="password">Mot de passe</label>
-					<input id="password"
-					type="password"
-					class="form-control"
-					formControlName="password" autocomplete="off">
-					<div [hidden]="userAddForm.get('password').valid || userAddForm.get('password').untouched" class="alert alert-danger">
-						Le mot de passe est requis et doit contenir 8 caractéres au minimum
-					</div>
-				</div>
-				<div class="form-group">
-					<button class="btn btn-success"
-					type="submit"
-					[disabled]="!userAddForm.valid">Ajouter
-					</button>
-					<button type="button" class="btn btn-default" (click)="goBack()">Annuler</button>
-				</div>
-			</form>
-		</div>
+
 	</div>
-</div>
+</div>	

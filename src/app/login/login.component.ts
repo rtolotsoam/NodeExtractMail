@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import {Router} from '@angular/router';
 import { AuthService } from './../service/auth.service';
@@ -8,7 +8,7 @@ import { AuthService } from './../service/auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit{
 
 	  loginForm : FormGroup;
 	  invalidCredentialMsg : String;
@@ -20,6 +20,10 @@ export class LoginComponent {
   	) {
   		this.buildForm();
   	}
+
+    ngOnInit(){
+      this.authService.logoutUser();
+    }
 
   	buildForm(): void {
   		this.loginForm = this.formBuilder.group({
@@ -35,7 +39,7 @@ export class LoginComponent {
         this.authService.isUserAuthenticated(matricule, password)
         .then(
             authenticated => {
-              console.log(authenticated);
+              
               if(authenticated) {
                 let url = this.authService.getRedirectUrl();
                 console.log('Redirect url : '+url);

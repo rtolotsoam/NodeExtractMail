@@ -11,16 +11,17 @@ import { Headers, Http, RequestOptions } from '@angular/http';
 export class UserService {
 
 	private host    = window.location.hostname;
-	private token = JSON.parse(localStorage.getItem('currentUser'));
+	private token;
 	private headers = new Headers({'Content-Type': 'application/json'});
-	private headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
+	private headers_token = new Headers();
 	private api     = `http://${this.host}:3000/api`;
-	private options = new RequestOptions({ headers: this.headers_token });
+	private options = new RequestOptions();
 
   	constructor(
   		private http: Http//,
   		//private authService : AuthService
-  	) {};
+  	) {
+  	};
 
   	/**
   	 * Pour récupérer tous les utilisateurs
@@ -28,6 +29,16 @@ export class UserService {
   	 */
   	getAllUsers(): Promise<User[]> {
   		const url = `${this.api}/listusers`;
+
+  		this.token = JSON.parse(localStorage.getItem('currentUser'));
+
+  		if(this.token != null){
+
+  			this.headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
+  		
+  			this.options = new RequestOptions({ headers: this.headers_token });
+  		}
+
 	    return this.http.get(url, this.options)
 	    	.toPromise()
 	    	.then(response => { return response.json() as User[]; })
@@ -56,7 +67,7 @@ export class UserService {
 	getAllLevel(): Promise<Level[]>{
 		const url = `${this.api}/listlevel`;
 
-		return this.http.get(url, this.options)
+		return this.http.get(url)
 			.toPromise()
 			.then(response => { return response.json() as Level[]; })
 			.catch(this.handleError);
@@ -69,6 +80,18 @@ export class UserService {
 	 */
 	getUser(id_user: string) : Promise<User>{
 		const url = `${this.api}/user/${id_user}`;
+
+		this.token = JSON.parse(localStorage.getItem('currentUser'));
+
+		console.log(this.token);
+
+		if(this.token != null){
+
+  			this.headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
+  		
+  			this.options = new RequestOptions({ headers: this.headers_token });
+  		}
+
 	    return this.http.get(url, this.options)
 	    	.toPromise()
 	    	.then(response => response.json() as User)
@@ -81,6 +104,16 @@ export class UserService {
 	 * @return {Promise<User>}      [description]
 	 */
 	update(user: User): Promise<User>{
+
+		this.token = JSON.parse(localStorage.getItem('currentUser'));
+
+		if(this.token != null){
+
+  			this.headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
+  		
+  			this.options = new RequestOptions({ headers: this.headers_token });
+  		}
+
 		return this.http.put(`${this.api}/userupdate/${user.id_user}`, JSON.stringify(user), { headers: this.headers_token })
 			.toPromise()
 			.then(response => response.json() as User)
@@ -94,6 +127,15 @@ export class UserService {
 	 */
 	add(user: User): Promise<User>{
 		const url = `${this.api}/adduser`;
+
+		this.token = JSON.parse(localStorage.getItem('currentUser'));
+		
+		if(this.token != null){
+
+  			this.headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
+  		
+  			this.options = new RequestOptions({ headers: this.headers_token });
+  		}
 
 		return this.http.post(url, JSON.stringify(user), {headers : this.headers_token})
 			.toPromise()

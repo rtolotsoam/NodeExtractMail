@@ -1,45 +1,104 @@
-<div class="row form-group">
-	<div class="col-md-9">
-		<h4>Tous les utilisateurs</h4>
-	</div>
-	<div class="col-md-3 text-right">
-		<button class="btn btn-success" routerLink="/adduser">Ajouter un nouvel utilisateur
-		</button>
-	</div>
-</div>
-<div class="table-responsive">
-	<table class="table table-bordered">
-		<thead>
-			<tr class="default">
-				<th rowspan="2" class="text-center" style="vertical-align: middle">MATRICULE
-				</th>
-				<th rowspan="2" class="text-center" style="vertical-align: middle">PRENOM
-				</th>
-				<th rowspan="2" class="text-center" style="vertical-align: middle">MAIL
-				</th>
-				<th colspan="3" class="text-center">ACTIONS</th>
-			</tr>
-			<tr class="default">
-				<th class="text-center">Voir détail</th>
-				<th class="text-center">Modifier</th>
-				<th class="text-center">Supprimer</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr *ngFor="let user of users">
-				<td class="text-center">{{user.matricule}}</td>
-				<td class="text-center">{{user.prenom}}</td>
-				<td class="text-center">{{user.mail}}</td>
-				<td class="text-center">
-					<button type="button" data-toggle="tooltip" data-placement="top" class="btn btn-default btn-block btn-xs" (click)="viewDetail(user.id_user)"><i class="fa fa-eye" aria-hidden="true"></i></button>
-				</td>
-				<td class="text-center">
-					<button type="button" class="btn btn-block btn-default btn-xs" (click)="update(user.id_user)"><i class="fa fa-edit" aria-hidden="true"></i></button>
-				</td>
-				<td class="text-center">
-					<button type="button" class="btn btn-danger btn-block btn-xs"><i class="fa fa-close" aria-hidden="true"></i></button>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>   
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="box-widget widget-module">
+                        <div class="widget-head clearfix">
+                            <span class="h-icon"><i class="fa fa-group"></i></span>
+                            <h4>Tous les utilisateurs</h4>
+                            <button class="btn btn-success pull-right" style="margin-top:0.8%; margin-right: 2%;" routerLink="/adduser">
+                                Ajouter un nouvel utilisateur
+                            </button>
+                        </div>
+
+                        <div class="widget-container">
+                            <div class=" widget-block">
+                            
+                                    <ngx-datatable 
+                                    	class="bootstrap table striped expandable"
+                                    	[rows]="users"
+                                    	[loadingIndicator]="loadingIndicator"
+                                    	[columnMode]="'force'"
+                                    	[headerHeight]="40"
+                                        [footerHeight]="40"
+                                    	[limit]="10"
+                                    	[rowHeight]="'auto'"
+                                    	[reorderable]="reorderable">
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Matricule
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.matricule}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Prénom
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.prenom}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Voir détail
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="margin-right: 2px;">
+                                                    <button type="button" class="btn btn-block btn-primary btn-xs" (click)="viewDetail(row.id_user)">
+                                                	<i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Modifier
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="margin-right: 2px;">
+                                                    <button type="button" class="btn btn-primary btn-block btn-xs" (click)="update(row.id_user)">
+                                                    	<i class="fa fa-edit" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Supprimer
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="width : 0 ! important;max-width: 240px; min-width: 220px;">
+                                                    <button type="button" class="btn btn-danger btn-block btn-xs">
+                                                    	<i class="fa fa-close" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+
+                                </div>
+                            </div>
+
+
+
+                </div>
+            </div>
+
+        </div>    
+
+    </div>
 </div>

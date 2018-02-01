@@ -53,7 +53,6 @@ function getAllUsers(req, res, next) {
 function getUserLogin(req, res, next) {
   var pass = crypt.encrypt(req.body.password);
 
-  console.log(req);
 
   db.one('SELECT * FROM users INNER JOIN level as lv ON users.level_id = lv.id_level WHERE matricule = $1 AND password = $2', 
     [ req.body.matricule, pass ])

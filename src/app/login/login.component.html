@@ -1,33 +1,65 @@
-<div class="col-md-offset-3 col-md-6">
-	<div class="panel panel-default">
-		<div class="row" style="margin: 0">
-			<div class="col-md-12 text-center form-header">
-				<h3>Login Form</h3>
+<div class="main-container">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12" style="margin-top: 20%;">
+				
 			</div>
-		</div>	
+		</div>
+		<div class="row">
+			<div class="col-md-offset-4 col-md-4">
+				<div class="well no-padding">
 
-		<div class="panel-body">
-				<form [formGroup]="loginForm" (ngSubmit)="onFormSubmit()" novalidate>
-					<div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">{{invalidCredentialMsg}}
-					</div>
-					<div class="form-group">
-						<label for="matricule">Matricule : </label>	
-				  		<input id="matricule" class="form-control" formControlName="matricule" placeholder="enter votre matricule" autocomplete="off">
-					  	<div [hidden]="loginForm.get('matricule').valid || loginForm.get('matricule').untouched" class="alert alert-danger">
-							Le matricule est requis et doit contenir que des nombres au minimum 2 nombres
-						</div>
-				  	</div>
-				  	<div class="form-group">
-				  		<label for="password">Mot de passe</label>	
-				  		<input id="password" class="form-control" type="password" formControlName="password" placeholder="enter votre mot de passe">
-					  	<div [hidden]="loginForm.get('password').valid || loginForm.get('password').untouched" class="alert alert-danger">
-							Le mot de passe est requis et doit contenir 8 caractéres au minimum
-						</div>
-					</div>
-					<div class="form-group">
-				  		<button class="btn btn-success" type="submit" [disabled]="!loginForm.valid">Login</button>
-				  	</div>	
-				</form>
-		</div>	
-	</div>	
+					<form [formGroup]="loginForm" (ngSubmit)="onFormSubmit()" novalidate id="login-form" class="smart-form client-form">
+
+						<header>
+							<span> 
+								<img src="/assets/images/logo_vivetic.png" alt="Vivetic">
+							</span>
+						</header>
+
+						<fieldset>
+							<section>
+								<div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">{{invalidCredentialMsg}}
+								</div>
+							</section>
+							<section>
+								<label class="label" for="matricule">Matricule : </label>
+								<label class="input">
+									<i class="icon-append fa fa-user"></i>
+						  			<input id="matricule" class="form-control" formControlName="matricule" autocomplete="off">
+						  			<b class="tooltip tooltip-top-right"><i class="fa fa-user txt-color-teal"></i> Merci d'entrer votre matricule </b>
+						  		</label>
+							  	<div [hidden]="loginForm.get('matricule').valid || loginForm.get('matricule').untouched" class="alert alert-danger">
+									Le matricule est requis et doit contenir que des nombres au minimum 2 nombres
+								</div>
+							</section>
+
+							<section>
+								<label class="label" for="password">Mot de passe</label>
+								<label class="input">	
+						  			<i class="icon-append fa fa-lock"></i>
+						  			<input id="password" class="form-control" type="password" formControlName="password">
+						  			<b class="tooltip tooltip-top-right"><i class="fa fa-lock txt-color-teal"></i> Merci d'enter votre mot de passe</b>
+						  		</label>
+							  	<div [hidden]="loginForm.get('password').valid || loginForm.get('password').untouched" class="alert alert-danger">
+									Le mot de passe est requis et doit contenir 8 caractéres au minimum
+								</div>
+							</section>
+
+						</fieldset>
+						<footer>
+							<button class="btn btn-primary" type="submit" [disabled]="!loginForm.valid">Login</button>
+						</footer>
+
+					</form>
+						
+
+				</div>
+			</div>
+		</div>
+
+	</div>
+
 </div>
+
+	

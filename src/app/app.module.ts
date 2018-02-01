@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpModule } from '@angular/http';
+import { NgxDatatableModule } from '@swimlane/ngx-datatable';
 
 // Components
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { UserAddComponent } from './user/user-add/user-add.component';
 import { UserService } from './service/user.service';
 import { AuthService } from './service/auth.service';
 import { AuthGuardService } from './service/auth-guard.service';
+import { IncludesComponent } from './includes/includes.component';
 
 
 @NgModule({
@@ -26,14 +28,16 @@ import { AuthGuardService } from './service/auth-guard.service';
     LoginComponent,
     UserDetailComponent,
     UserUpdateComponent,
-    UserAddComponent
+    UserAddComponent,
+    IncludesComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    HttpModule
+    HttpModule,
+    NgxDatatableModule
   ],
   providers: [
     UserService,

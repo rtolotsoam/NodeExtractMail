@@ -14,7 +14,9 @@ export class AuthService {
 
   	constructor(private userService : UserService) {
   		var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  		this.token = currentUser && currentUser.token;
+  		if(currentUser != null){
+  			this.token = currentUser.token;
+  		}
   	}
 
   	isUserAuthenticated(matricule: number, password:string): Promise<boolean> {	 

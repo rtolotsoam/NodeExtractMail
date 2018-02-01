@@ -53,6 +53,6 @@ router.post('/api/insertattachment', modelattachemnt.insertAttachment);
  */
 var modellevel = require('./level.model');
 
-router.get('/api/listlevel', token.verifyToken, modellevel.getAllLevel);
+router.get('/api/listlevel', modellevel.getAllLevel);
 
 module.exports = router;

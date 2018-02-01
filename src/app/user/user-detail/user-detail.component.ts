@@ -22,6 +22,7 @@ export class UserDetailComponent implements OnInit {
       private router: Router
   	) { };
 
+
   	ngOnInit(): void {
   		this.route.params
       	.switchMap((params: Params) => this.userService.getUser(params['id_user']))

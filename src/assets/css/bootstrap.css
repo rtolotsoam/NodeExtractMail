@@ -186,10 +186,10 @@ th {
     box-shadow: none !important;
     text-shadow: none !important;
   }
-/*  a,
+  a,
   a:visited {
     text-decoration: underline;
-  }*/
+  }
   a[href]:after {
     content: " (" attr(href) ")";
   }
@@ -1087,7 +1087,7 @@ a {
 a:hover,
 a:focus {
   color: #23527c;
-  /*text-decoration: underline;*/
+  text-decoration: underline;
 }
 a:focus {
   outline: thin dotted;
@@ -1570,7 +1570,6 @@ pre code {
   padding-left: 15px;
   padding-right: 15px;
 }
-/* hng
 @media (min-width: 768px) {
   .container {
     width: 750px;
@@ -1586,7 +1585,6 @@ pre code {
     width: 1170px;
   }
 }
-*/
 .container-fluid {
   margin-right: auto;
   margin-left: auto;
@@ -3457,7 +3455,7 @@ fieldset[disabled] .btn-link {
 .btn-link:hover,
 .btn-link:focus {
   color: #23527c;
-  /*text-decoration: underline;*/
+  text-decoration: underline;
   background-color: transparent;
 }
 .btn-link[disabled]:hover,
@@ -5888,7 +5886,6 @@ button.close {
   bottom: 0;
   left: 0;
   z-index: 1050;
-  /*z-index: 100000;*/
   -webkit-overflow-scrolling: touch;
   outline: 0;
 }
