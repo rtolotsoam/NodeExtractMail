@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { User } from '../service/user';
 import { UserService } from '../service/user.service';
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/of';
 
@@ -46,7 +46,7 @@ export class UserComponent implements OnInit {
 
   	viewDetail(id: string): void {
 	    this.router.navigate(['/detailuser', id]);
-	}
+	  }
 
 
 

@@ -12,7 +12,7 @@ var db = require('./conn.js');
 function getAllLevel(req, res, next){
 	db.any('SELECT * FROM level')
 	.then(function(data){
-		res.status(200)
+		return res.status(200)
 	    .json({
 	        data : data
 	    });

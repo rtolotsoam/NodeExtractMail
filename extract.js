@@ -116,8 +116,10 @@ function extractInbox(mailConfig) {
                                 console.log('from ==>' + frommail);
                                 var fromname = mail.from.value[0].name; // Nom de l'envoyeur du mail
                                 console.log('fromname ==>' + fromname);
-                                var tomail = mail.to.value[0].address; // Adresse mail qui reçoit le mail
-                                console.log('tomail ==>' + tomail);
+                                if(mail.to.value.length>0){
+                                    var tomail = mail.to.value[0].address; // Adresse mail qui reçoit le mail
+                                    console.log('tomail ==>' + tomail);
+                                }
                                 var subject = mail.subject; //  Sujet du mail
                                 console.log('subject ==>' + subject);
                                 /*
@@ -143,240 +145,242 @@ function extractInbox(mailConfig) {
                               Pour assurer que le mail est destinné au addresse mail
                               c-a-d to pas cc
                                */
-                              if(mailConfig.user == tomail) {
+                              if(mail.to.value.length>0){
+                                  if(mailConfig.user == tomail) {
 
-                                    var dir = 'data/' + tomail;
-                                    /*
-                                    tester si le répertoire existe déja
-                                     */
-                                    if (!fs.existsSync(dir)) {
-                                        fs.mkdirSync(dir); // création du répertoire avec pour nom l'adresse mail (tomail)
-                                    }
-                                    var dirmail = dir + '/' + seqno;
-                                    if (!fs.existsSync(dirmail)) {
-                                        fs.mkdirSync(dirmail); // création du répertoire pour enregistrer les mail (tomail/uid)
-                                        var filename = dirmail + '/' + seqno + '.html'; //  le corp du mail est enregistrer en format uid.html
-                                        var bodystream = fs.createWriteStream(filename);
-                                        //bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
-                                        bodystream.write(mail.html);
-                                        bodystream.end();
-                                        console.log('======================> saved simple<=================');
+                                        var dir = 'data/' + tomail;
                                         /*
-                                        Données à insérer dans inbox
+                                        tester si le répertoire existe déja
                                          */
-                                        var donneesInsert = {
-                                            url: 'http://localhost:3000/api/insertinbox',
-                                            method: 'POST',
-                                            headers: headers,
-                                            form: {
-                                                'cc': ccadd,
-                                                'subject': subject,
-                                                'frommail': frommail,
-                                                'tomail': tomail,
-                                                'uidmail': uid,
-                                                'dateservermail': dateservermail,
-                                                'fromname': fromname,
-                                                'dateservermailformat': dateservermailformat
-                                            }
+                                        if (!fs.existsSync(dir)) {
+                                            fs.mkdirSync(dir); // création du répertoire avec pour nom l'adresse mail (tomail)
                                         }
-                                        /*
-                                        Pour ré-initialiser les variable
-                                         */
-                                        ccadd                = ''; 
-                                        subject              = '';
-                                        frommail             = '';
-                                        tomail               = '';
-                                        dateservermailformat = '';
-                                        fromname             = '';
-                                        dateservermailformat = '';
-                                        /*
-                                        Pour l'insertion des données dans inbox
-                                         */
-                                        asyncGetidbox(donneesInsert).then(result => {
-                                            console.log('#id_inbox ==>' + idinbox);
+                                        var dirmail = dir + '/' + seqno;
+                                        if (!fs.existsSync(dirmail)) {
+                                            fs.mkdirSync(dirmail); // création du répertoire pour enregistrer les mail (tomail/uid)
+                                            var filename = dirmail + '/' + seqno + '.html'; //  le corp du mail est enregistrer en format uid.html
+                                            var bodystream = fs.createWriteStream(filename);
+                                            //bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
+                                            bodystream.write(mail.html);
+                                            bodystream.end();
+                                            console.log('======================> saved simple<=================');
                                             /*
-                                            tester s'il y a des fichier en attachement
+                                            Données à insérer dans inbox
                                              */
-                                            if (mail.attachments.length > 0) {
-                                                console.log('=============> DEBUT attachment <==============');
-                                                var count     = mail.attachments.length; // nombre attachement
-                                                var attach    = mail.attachments;
-                                                var attachdir = dirmail + '/attach';
-                                                if (!fs.existsSync(attachdir)) {
-                                                  fs.mkdirSync(attachdir);
+                                            var donneesInsert = {
+                                                url: 'http://localhost:3000/api/insertinbox',
+                                                method: 'POST',
+                                                headers: headers,
+                                                form: {
+                                                    'cc': ccadd,
+                                                    'subject': subject,
+                                                    'frommail': frommail,
+                                                    'tomail': tomail,
+                                                    'uidmail': uid,
+                                                    'dateservermail': dateservermail,
+                                                    'fromname': fromname,
+                                                    'dateservermailformat': dateservermailformat
                                                 }
-
+                                            }
+                                            /*
+                                            Pour ré-initialiser les variable
+                                             */
+                                            ccadd                = ''; 
+                                            subject              = '';
+                                            frommail             = '';
+                                            tomail               = '';
+                                            dateservermailformat = '';
+                                            fromname             = '';
+                                            dateservermailformat = '';
+                                            /*
+                                            Pour l'insertion des données dans inbox
+                                             */
+                                            asyncGetidbox(donneesInsert).then(result => {
+                                                console.log('#id_inbox ==>' + idinbox);
                                                 /*
-                                                Pour tous récupérer les attachments
+                                                tester s'il y a des fichier en attachement
                                                  */
-                                                for (var i = 0; i < count; i++) {
-                                                    var attachfilename = attach[i].filename; // 
-                                                    console.log('filename ' + seqno + '=============>' + attachfilename);
-                                                    var file = attachdir + '/' + attach[i].filename; // enregistrement de l'attachement avec son nom
-                                                    var size = attach[i].size; // taille de l'attachement
-                                                    console.log('size ===>' + size);
-                                                    var attachstream = fs.createWriteStream(file);
-                                                    attachstream.write(attach[i].content);
-                                                    attachstream.end();
-                                                    /*
-                                                    Données à insérer dans attachment
-                                                     */
-                                                    var donneesAttach = {
-                                                        url: 'http://localhost:3000/api/insertattachment',
-                                                        method: 'POST',
-                                                        headers: headers,
-                                                        form: {
-                                                            'filename': attachfilename,
-                                                            'inbox_id': idinbox,
-                                                            'uidmail': uid,
-                                                            'size': size
-                                                        }
+                                                if (mail.attachments.length > 0) {
+                                                    console.log('=============> DEBUT attachment <==============');
+                                                    var count     = mail.attachments.length; // nombre attachement
+                                                    var attach    = mail.attachments;
+                                                    var attachdir = dirmail + '/attach';
+                                                    if (!fs.existsSync(attachdir)) {
+                                                      fs.mkdirSync(attachdir);
                                                     }
-                                                    /*
-                                                    Pour ré-initialiser les variables
-                                                     */
-                                                    attachfilename = '';
-                                                    size           = '';
-                                                    /*
-                                                    Pour l'insertion des données dans attachment
-                                                     */
-                                                    request(donneesAttach, function(error, response, body) {
-                                                        if (!error && response.statusCode == 200) {
-                                                            console.log('#insertion attachment : OK');
-                                                        } else {
-                                                            console.log('#error lors insertion attachment :' + error);
-                                                        }
-                                                    });
-                                                    console.log('content attach' + seqno + '=============> saved <========================');
-                                                }
-                                                console.log('=============> FIN attachment <==============');
-                                            }
-                                        }).catch(error => {
-                                            console.log('#error get id_inbox' + error);
-                                        });
-                                    }
-                                console.log("================>  simpleparser  END <==========================");
-                              
-                              }else{
 
-                                    var dir = 'data/' + mailConfig.user;
-                                    /*
-                                    tester si le répertoire existe déja
-                                     */
-                                    if (!fs.existsSync(dir)) {
-                                        fs.mkdirSync(dir); // création du répertoire avec pour nom l'adresse mail (tomail)
-                                    }
-                                    var dirmail = dir + '/' + seqno;
-                                    if (!fs.existsSync(dirmail)) {
-                                        fs.mkdirSync(dirmail); // création du répertoire pour enregistrer les mail (tomail/uid)
-                                        var filename = dirmail + '/' + seqno + '.html'; //  le corp du mail est enregistrer en format uid.html
-                                        var bodystream = fs.createWriteStream(filename);
-                                        //bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
-                                        bodystream.write(mail.html);
-                                        bodystream.end();
-                                        console.log('======================> saved simple<=================');
-                                        /*
-                                        Données à insérer dans inbox
-                                         */
-                                        var donneesInsert = {
-                                            url: 'http://localhost:3000/api/insertinboxcc',
-                                            method: 'POST',
-                                            headers: headers,
-                                            form: {
-                                                'cc': ccadd,
-                                                'subject': subject,
-                                                'frommail': frommail,
-                                                'tomail': mailConfig.user,
-                                                'uidmail': uid,
-                                                'dateservermail': dateservermail,
-                                                'fromname': fromname,
-                                                'dateservermailformat': dateservermailformat,
-                                                'tomailcc' : tomail,
-                                                'flagcc' : true
-                                            }
+                                                    /*
+                                                    Pour tous récupérer les attachments
+                                                     */
+                                                    for (var i = 0; i < count; i++) {
+                                                        var attachfilename = attach[i].filename; // 
+                                                        console.log('filename ' + seqno + '=============>' + attachfilename);
+                                                        var file = attachdir + '/' + attach[i].filename; // enregistrement de l'attachement avec son nom
+                                                        var size = attach[i].size; // taille de l'attachement
+                                                        console.log('size ===>' + size);
+                                                        var attachstream = fs.createWriteStream(file);
+                                                        attachstream.write(attach[i].content);
+                                                        attachstream.end();
+                                                        /*
+                                                        Données à insérer dans attachment
+                                                         */
+                                                        var donneesAttach = {
+                                                            url: 'http://localhost:3000/api/insertattachment',
+                                                            method: 'POST',
+                                                            headers: headers,
+                                                            form: {
+                                                                'filename': attachfilename,
+                                                                'inbox_id': idinbox,
+                                                                'uidmail': uid,
+                                                                'size': size
+                                                            }
+                                                        }
+                                                        /*
+                                                        Pour ré-initialiser les variables
+                                                         */
+                                                        attachfilename = '';
+                                                        size           = '';
+                                                        /*
+                                                        Pour l'insertion des données dans attachment
+                                                         */
+                                                        request(donneesAttach, function(error, response, body) {
+                                                            if (!error && response.statusCode == 200) {
+                                                                console.log('#insertion attachment : OK');
+                                                            } else {
+                                                                console.log('#error lors insertion attachment :' + error);
+                                                            }
+                                                        });
+                                                        console.log('content attach' + seqno + '=============> saved <========================');
+                                                    }
+                                                    console.log('=============> FIN attachment <==============');
+                                                }
+                                            }).catch(error => {
+                                                console.log('#error get id_inbox' + error);
+                                            });
                                         }
+                                    console.log("================>  simpleparser  END <==========================");
+                                  
+                                  }else{
+
+                                        var dir = 'data/' + mailConfig.user;
                                         /*
-                                        Pour ré-initialiser les variable
+                                        tester si le répertoire existe déja
                                          */
-                                        ccadd                = ''; 
-                                        subject              = '';
-                                        frommail             = '';
-                                        tomail               = '';
-                                        dateservermailformat = '';
-                                        fromname             = '';
-                                        dateservermailformat = '';
-                                        /*
-                                        Pour l'insertion des données dans inbox
-                                         */
-                                        asyncGetidbox(donneesInsert).then(result => {
-                                            console.log('#id_inbox ==>' + idinbox);
+                                        if (!fs.existsSync(dir)) {
+                                            fs.mkdirSync(dir); // création du répertoire avec pour nom l'adresse mail (tomail)
+                                        }
+                                        var dirmail = dir + '/' + seqno;
+                                        if (!fs.existsSync(dirmail)) {
+                                            fs.mkdirSync(dirmail); // création du répertoire pour enregistrer les mail (tomail/uid)
+                                            var filename = dirmail + '/' + seqno + '.html'; //  le corp du mail est enregistrer en format uid.html
+                                            var bodystream = fs.createWriteStream(filename);
+                                            //bodystream.write(encoding.convert(mail.html, 'iso-8859-1', 'utf-8'));
+                                            bodystream.write(mail.html);
+                                            bodystream.end();
+                                            console.log('======================> saved simple<=================');
                                             /*
-                                            tester s'il y a des fichier en attachement
+                                            Données à insérer dans inbox
                                              */
-                                            if (mail.attachments.length > 0) {
-                                                console.log('=============> DEBUT attachment <==============');
-                                                var count     = mail.attachments.length; // nombre attachement
-                                                var attach    = mail.attachments;
-                                                var attachdir = dirmail + '/attach';
-                                                if (!fs.existsSync(attachdir)) {
-                                                  fs.mkdirSync(attachdir);
+                                            var donneesInsert = {
+                                                url: 'http://localhost:3000/api/insertinboxcc',
+                                                method: 'POST',
+                                                headers: headers,
+                                                form: {
+                                                    'cc': ccadd,
+                                                    'subject': subject,
+                                                    'frommail': frommail,
+                                                    'tomail': mailConfig.user,
+                                                    'uidmail': uid,
+                                                    'dateservermail': dateservermail,
+                                                    'fromname': fromname,
+                                                    'dateservermailformat': dateservermailformat,
+                                                    'tomailcc' : tomail,
+                                                    'flagcc' : true
                                                 }
-
-                                                /*
-                                                Pour tous récupérer les attachments
-                                                 */
-                                                for (var i = 0; i < count; i++) {
-                                                    var attachfilename = attach[i].filename; // 
-                                                    console.log('filename ' + seqno + '=============>' + attachfilename);
-                                                    var file = attachdir + '/' + attach[i].filename; // enregistrement de l'attachement avec son nom
-                                                    var size = attach[i].size; // taille de l'attachement
-                                                    console.log('size ===>' + size);
-                                                    var attachstream = fs.createWriteStream(file);
-                                                    attachstream.write(attach[i].content);
-                                                    attachstream.end();
-                                                    /*
-                                                    Données à insérer dans attachment
-                                                     */
-                                                    var donneesAttach = {
-                                                        url: 'http://localhost:3000/api/insertattachment',
-                                                        method: 'POST',
-                                                        headers: headers,
-                                                        form: {
-                                                            'filename': attachfilename,
-                                                            'inbox_id': idinbox,
-                                                            'uidmail': uid,
-                                                            'size': size
-                                                        }
-                                                    }
-                                                    /*
-                                                    Pour ré-initialiser les variables
-                                                     */
-                                                    attachfilename = '';
-                                                    size           = '';
-                                                    /*
-                                                    Pour l'insertion des données dans attachment
-                                                     */
-                                                    request(donneesAttach, function(error, response, body) {
-                                                        if (!error && response.statusCode == 200) {
-                                                            console.log('#insertion attachment : OK');
-                                                        } else {
-                                                            console.log('#error lors insertion attachment :' + error);
-                                                        }
-                                                    });
-                                                    console.log('content attach' + seqno + '=============> saved <========================');
-                                                }
-                                                console.log('=============> FIN attachment <==============');
                                             }
-                                        }).catch(error => {
-                                            console.log('#error get id_inbox' + error);
-                                        });
-                                    }                                
+                                            /*
+                                            Pour ré-initialiser les variable
+                                             */
+                                            ccadd                = ''; 
+                                            subject              = '';
+                                            frommail             = '';
+                                            tomail               = '';
+                                            dateservermailformat = '';
+                                            fromname             = '';
+                                            dateservermailformat = '';
+                                            /*
+                                            Pour l'insertion des données dans inbox
+                                             */
+                                            asyncGetidbox(donneesInsert).then(result => {
+                                                console.log('#id_inbox ==>' + idinbox);
+                                                /*
+                                                tester s'il y a des fichier en attachement
+                                                 */
+                                                if (mail.attachments.length > 0) {
+                                                    console.log('=============> DEBUT attachment <==============');
+                                                    var count     = mail.attachments.length; // nombre attachement
+                                                    var attach    = mail.attachments;
+                                                    var attachdir = dirmail + '/attach';
+                                                    if (!fs.existsSync(attachdir)) {
+                                                      fs.mkdirSync(attachdir);
+                                                    }
+
+                                                    /*
+                                                    Pour tous récupérer les attachments
+                                                     */
+                                                    for (var i = 0; i < count; i++) {
+                                                        var attachfilename = attach[i].filename; // 
+                                                        console.log('filename ' + seqno + '=============>' + attachfilename);
+                                                        var file = attachdir + '/' + attach[i].filename; // enregistrement de l'attachement avec son nom
+                                                        var size = attach[i].size; // taille de l'attachement
+                                                        console.log('size ===>' + size);
+                                                        var attachstream = fs.createWriteStream(file);
+                                                        attachstream.write(attach[i].content);
+                                                        attachstream.end();
+                                                        /*
+                                                        Données à insérer dans attachment
+                                                         */
+                                                        var donneesAttach = {
+                                                            url: 'http://localhost:3000/api/insertattachment',
+                                                            method: 'POST',
+                                                            headers: headers,
+                                                            form: {
+                                                                'filename': attachfilename,
+                                                                'inbox_id': idinbox,
+                                                                'uidmail': uid,
+                                                                'size': size
+                                                            }
+                                                        }
+                                                        /*
+                                                        Pour ré-initialiser les variables
+                                                         */
+                                                        attachfilename = '';
+                                                        size           = '';
+                                                        /*
+                                                        Pour l'insertion des données dans attachment
+                                                         */
+                                                        request(donneesAttach, function(error, response, body) {
+                                                            if (!error && response.statusCode == 200) {
+                                                                console.log('#insertion attachment : OK');
+                                                            } else {
+                                                                console.log('#error lors insertion attachment :' + error);
+                                                            }
+                                                        });
+                                                        console.log('content attach' + seqno + '=============> saved <========================');
+                                                    }
+                                                    console.log('=============> FIN attachment <==============');
+                                                }
+                                            }).catch(error => {
+                                                console.log('#error get id_inbox' + error);
+                                            });
+                                        }                                
 
 
 
 
-                                console.log("================>  simpleparser  END <==========================");
-                              }
+                                    console.log("================>  simpleparser  END <==========================");
+                                  }
+                          }
 
 
                             });

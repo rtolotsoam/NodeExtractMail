@@ -17,6 +17,7 @@ export class UserAddComponent {
 	userAddForm: FormGroup;
 	user = new User();
 	level : Level;
+  invalidCredentialMsg : String;
 
   	constructor(
   		private userService: UserService,
@@ -47,8 +48,14 @@ export class UserAddComponent {
     	let user = this.userAddForm.value as User;
     	this.userService.add(user)
     		.then(response => {
-    			console.log('response :', response);
-    			this.router.navigate(['/user']);
+    			//console.log('response :', response['status']);
+            if(response['status'] == 'error'){
+              this.invalidCredentialMsg = 'Merci de modifier le matricule ou le mot de passe, car il y a risque de doublon !';
+            }else if(response['status'] == 'success'){
+    			      this.router.navigate(['/user']);
+            }else{
+              this.invalidCredentialMsg = 'Merci de réessayer plus tard, car la base de données est indisponible !';
+            }
     		});
 
     }

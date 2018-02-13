@@ -24,11 +24,12 @@ router.get('/', function(req, res, next) {
  */
 var modeluser = require('./user.model'); 
 
-router.post('/api/login', modeluser.getUserLogin);
-router.get('/api/listusers', token.verifyToken, modeluser.getAllUsers);
-router.get('/api/user/:id', token.verifyToken, modeluser.getUser);
-router.put('/api/userupdate/:id', token.verifyToken, modeluser.updateUser);
-router.post('/api/adduser', token.verifyToken, modeluser.insertUser);
+router.post('/login', modeluser.getUserLogin);
+router.get('/listusers', token.verifyToken, modeluser.getAllUsers);
+router.get('/user/:id', token.verifyToken, modeluser.getUser);
+router.put('/userupdate/:id', token.verifyToken, modeluser.updateUserVerif);
+router.post('/adduser', token.verifyToken, modeluser.insertUser);
+router.post('/adduserverif', token.verifyToken, modeluser.insertUserVerif);
 
 /**
  * Route pour le model : inbox.model.js
@@ -36,15 +37,15 @@ router.post('/api/adduser', token.verifyToken, modeluser.insertUser);
  */
 var modelinbox = require('./inbox.model'); 
 
-router.post('/api/insertinbox', modelinbox.insertInbox);
-router.post('/api/insertinboxcc', modelinbox.insertInboxCC);
+router.post('/insertinbox', modelinbox.insertInbox);
+router.post('/insertinboxcc', modelinbox.insertInboxCC);
 
 /**
  * Route pour le model : attachment.model.js
  * @type {[type]}
  */
 var modelattachemnt = require('./attachment.model');
-router.post('/api/insertattachment', modelattachemnt.insertAttachment);
+router.post('/insertattachment', modelattachemnt.insertAttachment);
 
 
 /**
@@ -53,6 +54,21 @@ router.post('/api/insertattachment', modelattachemnt.insertAttachment);
  */
 var modellevel = require('./level.model');
 
-router.get('/api/listlevel', modellevel.getAllLevel);
+router.get('/listlevel', modellevel.getAllLevel);
+
+
+/**
+ * Route pour le model : client.model.js
+ * @type {[type]}
+ */
+var modelclient = require('./client.model');
+
+router.get('/mailclient', token.verifyToken, modelclient.getAllMail);
+router.get('/mailclient/:id', token.verifyToken, modelclient.getMail);
+router.put('/clientupdate/:id', token.verifyToken, modelclient.updateMail);
+router.post('/mailinsert', token.verifyToken, modelclient.insertMail);
+router.get('/mailimap', modelclient.getMailImap);
+router.get('/mailpop', modelclient.getMailPop);
+
 
 module.exports = router;

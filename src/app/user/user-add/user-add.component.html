@@ -19,6 +19,8 @@
 						<form [formGroup]="userAddForm"
 							(ngSubmit)="add()"
 							novalidate>
+							<div *ngIf="invalidCredentialMsg" class="alert alert-danger 	text-center">{{invalidCredentialMsg}}
+							</div>
 							<div class="form-group">
 								<label for="prenom">Prénom</label>
 								<input id="prenom" 

@@ -1,0 +1,104 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>   
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="box-widget widget-module">
+                        <div class="widget-head clearfix">
+                            <span class="h-icon"><i class="fa fa-envelope"></i></span>
+                            <h4>Tous les Mails client</h4>
+                            <button class="btn btn-success pull-right" style="margin-top:0.8%; margin-right: 2%;" routerLink="/addmailclient">
+                                Ajouter un nouveau mail client
+                            </button>
+                        </div>
+
+                        <div class="widget-container">
+                            <div class=" widget-block">
+                            
+                                    <ngx-datatable 
+                                    	class="bootstrap table striped expandable"
+                                    	[rows]="client"
+                                    	[loadingIndicator]="loadingIndicator"
+                                    	[columnMode]="'force'"
+                                    	[headerHeight]="40"
+                                        [footerHeight]="40"
+                                    	[limit]="10"
+                                    	[rowHeight]="'auto'"
+                                    	[reorderable]="reorderable">
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Mail client
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.mailclient}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Nom client
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.nameclient}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Voir détail
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="margin-right: 2px;">
+                                                    <button type="button" class="btn btn-block btn-primary btn-xs" (click)="viewDetailMail(row.id_mailclient)">
+                                                	<i class="fa fa-eye" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Modifier
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="margin-right: 2px;">
+                                                    <button type="button" class="btn btn-primary btn-block btn-xs" (click)="update(row.id_mailclient)">
+                                                    	<i class="fa fa-edit" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Supprimer
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="width : 0 ! important;max-width: 240px; min-width: 220px;">
+                                                    <button type="button" class="btn btn-danger btn-block btn-xs">
+                                                    	<i class="fa fa-close" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+
+                                </div>
+                            </div>
+
+
+
+                </div>
+            </div>
+
+        </div>    
+
+    </div>
+</div>

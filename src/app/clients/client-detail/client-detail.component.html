@@ -1,0 +1,51 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>
+		<div class="row">
+			<div class="col-md-offset-3 col-md-6" *ngIf="client">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div>
+							<button type="button" class="btn btn-info" (click)="goBack()">Retour</button>
+						</div>
+					</div>
+					<div class="panel-body">
+						<form>
+							<div class="form-group">
+								<label for="nameclient">Nom du client</label>
+								<input readonly [(ngModel)]="client.nameclient" name="nameclient" id="nameclient" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="mailclient">Adresse Email du client</label>
+								<input readonly id="mailclient" [(ngModel)]="client.mailclient" name="mailclient" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="typemail">Type de mail</label>
+								<input readonly id="typemail" [(ngModel)]="client.typemail" name="typemail" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="passmail">Mot de passe mail</label>
+								<input readonly id="passmail" [(ngModel)]="client.passmail" name="passmail" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="hostmail">Nom de domaine du mail</label>
+								<input readonly id="hostmail" [(ngModel)]="client.hostmail" name="hostmail" type="text" class="form-control">
+							</div>
+							<div class="form-group">
+								<label for="portmail">Port du mail</label>
+								<input readonly id="portmail" [(ngModel)]="client.portmail" name="portmail" type="text" class="form-control">
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+
+	</div>
+</div>

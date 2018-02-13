@@ -10,6 +10,13 @@
 
 Promise.longStackTraces();
 /*
+Variable header pour les requêtes POST ou GET sur api 
+ */
+var headers = {
+    'User-Agent': 'Super Agent/0.0.1',
+    'Content-Type': 'application/x-www-form-urlencoded'
+}
+/*
 Liste des addres mail qui recoivent les mails
  */
 var imap1 = {
@@ -17,34 +24,39 @@ var imap1 = {
     password: 'TestSI2017',
     host: 'mail.vivetic.com',
     port: 143,
-    tls: false
+    tls: false,
+    autotls: 'always',
+    tlsOptions: { rejectUnauthorized: false },
+    debug: console.log
 };
 var imap2 = {
     user: 'si.presta2@vivetic.com',
     password: 'TestSI2017',
     host: 'mail.vivetic.com',
     port: 143,
-    tls: false
+    tls: false,
+    autotls: 'always',
+    tlsOptions: { rejectUnauthorized: false },
+    debug: console.log
 };
 var imap3 = {
     user: 'si.presta3@vivetic.com',
     password: 'TestSI2017',
     host: 'mail.vivetic.com',
     port: 143,
-    tls: false
+    tls: false,
+    autotls: 'always',
+    tlsOptions: { rejectUnauthorized: false },
+    debug: console.log
 };
+
 var imaps = [];
+
 imaps[1]  = imap1;
 imaps[2]  = imap2;
 imaps[3]  = imap3;
 
-/*
-Variable header pour les requêtes POST ou GET sur api 
- */
-var headers = {
-    'User-Agent': 'Super Agent/0.0.1',
-    'Content-Type': 'application/x-www-form-urlencoded'
-}
+
 var test = true; //  Variable pour une test dans le fonction asynchrone
 /*
 Fonction pour rendre boucle WHILE asynchrone
@@ -78,6 +90,9 @@ function asyncGetidbox(donneesInsert) {
         });
     });
 }
+
+
+
 var execute = 0; //  Variable qui compte les mails executer
 /*
 Boucle pour extraire tous les données des adresses mails (imaps : array)

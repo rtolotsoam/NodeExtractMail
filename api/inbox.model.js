@@ -12,7 +12,7 @@ function insertInbox(req, res, next) {
       'values(${cc}, ${subject}, ${frommail}, ${tomail}, ${uidmail}, ${dateservermail}, ${fromname}, ${dateservermailformat}) RETURNING id_inbox',
     req.body)
     .then(data => {
-      res.status(200)
+      return res.status(200)
         .json({
           status: 'success',
           id_inbox : data.id_inbox,
@@ -33,7 +33,7 @@ function insertInboxCC(req, res, next) {
     req.body)
     .then(data => {
       
-      res.status(200)
+      return res.status(200)
       .json({
         status: 'success',
         id_inbox : data.id_inbox,

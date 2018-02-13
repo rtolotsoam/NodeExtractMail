@@ -7,6 +7,13 @@ import { UserUpdateComponent }  from './user/user-update/user-update.component';
 import { UserAddComponent } from './user/user-add/user-add.component';
 import { LoginComponent } from './login/login.component';
 
+
+import { ClientsComponent}      from './clients/clients.component';
+import { ClientDetailComponent }  from './clients/client-detail/client-detail.component';
+import { ClientUpdateComponent }  from './clients/client-update/client-update.component';
+import { ClientAddComponent } from './clients/client-add/client-add.component';
+
+
 import { AuthGuardService } from './service/auth-guard.service';
 
 const routes: Routes = [
@@ -17,9 +24,19 @@ const routes: Routes = [
   	canActivate : [ AuthGuardService ]
   },
   {
+    path: 'detailmail/:id_mailclient', 
+    component: ClientDetailComponent,
+    canActivate : [ AuthGuardService ]
+  },
+  {
   	path: 'updateuser/:id_user', 
   	component: UserUpdateComponent,
   	canActivate : [ AuthGuardService ]
+  },
+  {
+    path: 'updatemail/:id_mailclient', 
+    component: ClientUpdateComponent,
+    canActivate : [ AuthGuardService ]
   },
   {
   	path: 'user',
@@ -27,9 +44,19 @@ const routes: Routes = [
    	canActivate : [ AuthGuardService ]
   },
   {
+    path: 'client',
+    component: ClientsComponent,
+    canActivate : [ AuthGuardService ]
+  },
+  {
   	path: 'adduser',
    	component: UserAddComponent,
    	canActivate : [ AuthGuardService ]
+  },
+  {
+    path: 'addmailclient',
+     component: ClientAddComponent,
+     canActivate : [ AuthGuardService ]
   },
   {path: 'login', component: LoginComponent}
 ];

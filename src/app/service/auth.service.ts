@@ -30,7 +30,7 @@ export class AuthService {
 	 				if(user.level == 'admin'){
 	 					this.redirectUrl = '/user';
 	 				}else{
-	 					this.redirectUrl = '/';
+	 					this.redirectUrl = '/inbox';
 	 				}
 	 				this.token = token;
 

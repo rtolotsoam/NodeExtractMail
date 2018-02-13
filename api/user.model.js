@@ -37,7 +37,7 @@ function getAllUsers(req, res, next) {
 
           }
 
-        res.status(200)
+        return res.status(200)
         .json({
             data : db_data
         });
@@ -76,7 +76,7 @@ function getUserLogin(req, res, next) {
                     idlevel : data.level_id
                 };
 
-      res.status(200)
+      return res.status(200)
       .json({
           data: db_data,
           token : token
@@ -84,7 +84,12 @@ function getUserLogin(req, res, next) {
 
   })
   .catch(function(err){
-      return err.received;
+      
+      return res.status(200)
+      .json({
+          status: 'erreur'
+      });
+      //return err.received;
   });
 }
 
@@ -114,7 +119,7 @@ function getUser(req, res, next) {
                       idlevel : data.level_id
                   };
 
-              res.status(200)
+              return res.status(200)
               .json({
                 data: db_data
               });
@@ -143,7 +148,7 @@ function updateUser(req, res, next) {
   db.none('UPDATE users SET matricule=$1, mail=$2, password=$3, prenom=$4, level_id=$5 where id_user=$6',
     [req.body.matricule, req.body.mail, pass, req.body.prenom, req.body.level, parseInt(req.body.id_user)])
     .then(function () {
-      res.status(200)
+      return res.status(200)
         .json({
           status: 'success',
           message: 'Updated User'
@@ -153,6 +158,46 @@ function updateUser(req, res, next) {
       return next(err);
     });
 }
+
+
+function updateUserVerif(req, res, next) {
+    var pass = crypt.encrypt(req.body.password);
+
+    db.tx(t => {
+      return t.oneOrNone('SELECT * FROM users INNER JOIN level as lv ON users.level_id = lv.id_level WHERE matricule = $1 AND password = $2', 
+              [ req.body.matricule, pass ])
+          .then(user => {
+
+              //console.log(user);
+              if(user) {
+                  return t.none('UPDATE users SET matricule=$1, mail=$2, password=$3, prenom=$4, level_id=$5 where id_user=$6',
+    [req.body.matricule, req.body.mail, pass, req.body.prenom, req.body.level, parseInt(req.body.id_user)]);
+              }
+              return []; // user not found, so no events*/
+          });
+    })
+    .then(events => {
+        //console.log('events :'+events);
+        if(events == null){
+            return res.status(200)
+            .json({
+              status: 'success',
+              message: 'Inserted one user'
+            });
+        }{
+            return res.status(200)
+            .json({
+              status: 'error',
+              message: 'user doublon'
+            });
+        }
+    })
+    .catch(error => {
+        return next(error);
+    });
+}
+
+
 
 
 /**
@@ -168,7 +213,7 @@ function insertUser(req, res, next){
   db.none('INSERT INTO users(matricule, mail, password, prenom, level_id)'+
     ' values($1, $2, $3, $4, $5)', [req.body.matricule, req.body.mail, pass, req.body.prenom, parseInt(req.body.level)])
   .then(function() {
-    res.status(200)
+    return res.status(200)
     .json({
       status: 'success',
       message: 'Inserted one user'
@@ -177,6 +222,51 @@ function insertUser(req, res, next){
   .catch(function(err){
     return next(err);
   });
+}
+
+/**
+ * vérification des doublons
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+function insertUserVerif(req, res, next){
+  var pass = crypt.encrypt(req.body.password);
+
+    db.tx(t => {
+      return t.oneOrNone('SELECT * FROM users INNER JOIN level as lv ON users.level_id = lv.id_level WHERE matricule = $1 AND password = $2', 
+              [ req.body.matricule, pass ])
+          .then(user => {
+
+              //console.log(user);
+              if(user == null) {
+                  return t.none('INSERT INTO users(matricule, mail, password, prenom, level_id)'+
+                  ' values($1, $2, $3, $4, $5)', [req.body.matricule, req.body.mail, pass, req.body.prenom, parseInt(req.body.level)]);
+              }
+              return []; // user not found, so no events*/
+          });
+    })
+    .then(events => {
+        //console.log('events :'+events);
+        if(events == null){
+            return res.status(200)
+            .json({
+              status: 'success',
+              message: 'Inserted one user'
+            });
+        }{
+            return res.status(200)
+            .json({
+              status: 'error',
+              message: 'user doublon'
+            });
+        }
+    })
+    .catch(error => {
+        return next(error);
+    });
+
 }
 
 
@@ -189,5 +279,7 @@ module.exports = {
     getUserLogin : getUserLogin,
     getUser : getUser,
     updateUser : updateUser,
-    insertUser : insertUser
+    insertUser : insertUser,
+    insertUserVerif : insertUserVerif,
+    updateUserVerif : updateUserVerif
 };

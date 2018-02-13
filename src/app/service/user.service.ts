@@ -126,7 +126,7 @@ export class UserService {
 	 * @return {Promise<User>}      [description]
 	 */
 	add(user: User): Promise<User>{
-		const url = `${this.api}/adduser`;
+		const url = `${this.api}/adduserverif`;
 
 		this.token = JSON.parse(localStorage.getItem('currentUser'));
 		

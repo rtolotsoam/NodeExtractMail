@@ -12,7 +12,7 @@ function insertAttachment(req, res, next) {
       'values(${filename}, ${inbox_id}, ${uidmail}, ${size})',
     req.body)
     .then(function() {
-      res.status(200)
+      return res.status(200)
         .json({
           status: 'success',
           message: 'Inserted attachments'

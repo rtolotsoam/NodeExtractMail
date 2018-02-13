@@ -1,0 +1,105 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>	
+
+		<div class="row">	
+			<div class="col-md-offset-3 col-md-6" *ngIf="client">
+				<div class="panel panel-default">
+					<div class="row">
+						<div class="col-md-12 text-center form-header"  style="margin-top: 15px;">
+							<h4>Ajouter un nouveau mail client</h4>
+						</div>
+					</div>
+					<div class="panel-body">
+						<form [formGroup]="clientAddForm"
+							(ngSubmit)="addmail()"
+							novalidate>
+							<div *ngIf="invalidCredentialMsg" class="alert alert-danger 	text-center">{{invalidCredentialMsg}}
+							</div>
+							<div class="form-group">
+								<label for="nameclient">Nom du client</label>
+								<input id="nameclient" 
+								type="text"
+								class="form-control" 
+								formControlName="nameclient" autocomplete="off">
+								<div [hidden]="clientAddForm.get('nameclient').valid || clientAddForm.get('nameclient').untouched" class="alert alert-danger">
+									Le nom du client est requis et doit contenir au maximum 50 caractères, au minimum 3 caractères.
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="hostmail">Nom de domaine du mail client</label>
+								<input id="hostmail"  
+								type="text"
+								class="form-control"
+								formControlName="hostmail" autocomplete="off">
+								<div [hidden]="clientAddForm.get('hostmail').valid || clientAddForm.get('hostmail').untouched" class="alert alert-danger">
+									Le nom de domaine du mail est requis et doit ne contenir que 15 caractères au minimum 
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="mailclient">Adresse E-mail du client</label>
+								<input id="mailclient"
+								type="email"
+								class="form-control"
+								formControlName="mailclient" autocomplete="off">
+								<div [hidden]="clientAddForm.get('mailclient').valid || clientAddForm.get('mailclient').untouched" class="alert alert-danger">
+									L'adresse E-mail est requis ou invalide
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="typemail">Type de mail</label>
+								<select id="typemail"
+								class="form-control"
+								formControlName="typemail">
+									<option value="" disabled>Merci de choisir parmi les options</option>
+									<option [value]="typemail.imap">
+					                 	{{ typemail.imap }}
+					               	</option>
+					               	<option [value]="typemail.pop">
+					                 	{{ typemail.pop }}
+					               	</option>
+								</select>
+								<div [hidden]="clientAddForm.get('typemail').valid || clientAddForm.get('typemail').untouched" class="alert alert-danger">
+									Le champ type de mail est obligatoire
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="passmail">Mot de passe du mail client</label>
+								<input id="passmail"
+								type="password"
+								class="form-control"
+								formControlName="passmail" autocomplete="off">
+								<div [hidden]="clientAddForm.get('passmail').valid || clientAddForm.get('passmail').untouched" class="alert alert-danger">
+									Le mot de passe est requis et doit contenir 8 caractères au minimum
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="portmail">Port du mail</label>
+								<input id="portmail"  
+								type="text"
+								class="form-control"
+								formControlName="portmail" autocomplete="off">
+								<div [hidden]="clientAddForm.get('portmail').valid || clientAddForm.get('portmail').untouched" class="alert alert-danger">
+									Le port du mail est requis et doit contenir que des nombres aux minimums 2 nombres
+								</div>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-success"
+								type="submit"
+								[disabled]="!clientAddForm.valid">Ajouter
+								</button>
+								<button type="button" class="btn btn-default" (click)="goBack()">Annuler</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>	

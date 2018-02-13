@@ -1,5 +1,5 @@
 import 'rxjs/add/operator/switchMap'
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { User } from '../../service/user';
 import { Level } from '../../service/level';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -10,7 +10,8 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 @Component({
   selector: 'app-user-update',
   templateUrl: './user-update.component.html',
-  styleUrls: ['./user-update.component.css']
+  styleUrls: ['./user-update.component.css'],
+  encapsulation: ViewEncapsulation.None
 })
 
 export class UserUpdateComponent implements OnInit {
@@ -18,6 +19,7 @@ export class UserUpdateComponent implements OnInit {
 	  userUpdateForm: FormGroup;
   	user: User;
     level: Level;
+    invalidCredentialMsg : String;
   	
   	constructor(private userService: UserService,
               	private router: Router,
@@ -49,7 +51,15 @@ export class UserUpdateComponent implements OnInit {
   	update(): void{
   		let user = this.userUpdateForm.value as User;
   		this.userService.update(user)
-  		.then(() => this.router.navigate(['user']));
+  		.then(response => { 
+            if(response['status'] == 'error'){
+              this.invalidCredentialMsg = 'Merci de modifier le matricule ou le mot de passe, car il y a risque de doublon !';
+            }else if(response['status'] == 'success'){
+                this.router.navigate(['/user']);
+            }else{
+              this.invalidCredentialMsg = 'Merci de réessayer plus tard, car la base de données est indisponible !';
+            }
+      });
   	}
 
     getLevel(): void{
