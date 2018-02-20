@@ -1,0 +1,70 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>	
+
+		<div class="row">	
+			<div class="col-md-offset-3 col-md-6" *ngIf="level">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div>
+							<button type="button" class="btn btn-info" (click)="goBack()">Retour</button>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-12 text-center form-header"  style="margin-top:15px;">
+							<h4>Voir les détails du level <span style="color: blue;">{{ level?.name }}</span></h4>
+						</div>
+					</div>
+					<div class="panel-body">
+						<form [formGroup]="accesDetailForm" (ngSubmit)="detachLien()" novalidate>
+							<div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">{{invalidCredentialMsg}}
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="lien_id">Voici les liens rattachés</label>
+										<select id="lien_id"
+										class="form-control"
+										formControlName="lien_id" multiple size="{{ lien.length }}">
+											<option *ngFor="let lnlv of lienLevel" 
+											[value]="lnlv.id_lien">
+							                 	{{ lnlv.path }}
+							               	</option>
+										</select>
+		 							</div>
+		 						</div>	
+		 						<div class="col-md-6">	
+		 							<div class="form-group">
+										<label>Voici les utilisateurs rattachés</label>
+										<select class="form-control" multiple disabled size="{{ lien.length }}">
+											<option *ngFor="let usr of user">
+							                 	{{ usr.matricule }} - {{ usr.prenom }}
+							               	</option>
+										</select>
+		 							</div>
+	 							</div>
+ 							</div>
+ 							<div class="row"> 							
+ 								<div class="col-md-6">
+	 								<div class="form-group">
+										<button class="btn btn-danger btn-block" type="submit">
+											Détaché des liens
+										</button>
+									</div>
+								</div>
+								<div class="col-md-6">
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>	

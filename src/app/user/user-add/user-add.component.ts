@@ -2,10 +2,11 @@ import 'rxjs/add/operator/switchMap';
 import { Component } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Location } from "@angular/common";
-import {Router} from '@angular/router';
+import { Router } from '@angular/router';
 import { Level } from '../../service/level';
 import { User } from '../../service/user';
 import { UserService } from '../../service/user.service';
+import { LevelService } from '../../service/level.service';
 
 @Component({
   selector: 'app-user-add',
@@ -23,7 +24,8 @@ export class UserAddComponent {
   		private userService: UserService,
   		private location: Location,
   		private router: Router,
-  		private formBuilder: FormBuilder
+  		private formBuilder: FormBuilder,
+      private levelService : LevelService
   	) { 
   		this.getLevel();
   		this.buildForm();
@@ -40,7 +42,7 @@ export class UserAddComponent {
   	}
 
   	getLevel(): void{
-      this.userService.getAllLevel()
+      this.levelService.getAllLevel()
       .then(level => { this.level = level['data'] });
     }
 

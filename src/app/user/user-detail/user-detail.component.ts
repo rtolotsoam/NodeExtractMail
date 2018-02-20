@@ -31,7 +31,6 @@ export class UserDetailComponent implements OnInit {
 
   	goBack(): void{
 	    this.router.navigate(['/user']);
-      //this.location.back();
 	  }
 
 }

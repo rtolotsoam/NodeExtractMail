@@ -13,7 +13,7 @@ var crypt       = require('./crypt');
  */
 function getAllMail(req, res, next) {
 
-	db.any('SELECT * FROM mailclient')
+	db.any('SELECT * FROM mailclient WHERE id_mailclient != 4')
     .then(function (data) {
           
           var db_data = [];
@@ -187,19 +187,27 @@ function getMail(req, res, next){
     });
 }
 
-
+/**
+ * Pour mettre jour un mail client
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
 function updateMail(req, res, next) {
     var passmail = crypt.encrypt(req.body.passmail);
 
     db.tx(t => {
-      return t.oneOrNone('SELECT * FROM mailclient WHERE mailclient = $1 AND passmail = $2', 
-              [ req.body.mailclient, passmail ])
+      return t.oneOrNone('SELECT * FROM mailclient WHERE mailclient = $1', 
+              [ req.body.mailclient ])
           .then(mail => {
 
-              //console.log(user);
-              if(mail) {
+              if(mail){
+                  return t.none('UPDATE mailclient SET nameclient=$1, passmail=$2, typemail=$3, hostmail=$4, portmail=$5 where id_mailclient=$6',
+                  [req.body.nameclient, passmail, req.body.typemail, req.body.hostmail, parseInt(req.body.portmail), parseInt(req.body.id_mailclient)]);
+              }else if(mail == null) {
                   return t.none('UPDATE mailclient SET mailclient=$1, nameclient=$2, passmail=$3, typemail=$4, hostmail=$5, portmail=$6 where id_mailclient=$7',
-    [req.body.mailclient, req.body.nameclient, passmail, req.body.typemail, req.body.hostmail, parseInt(req.body.portmail), parseInt(req.body.id_mailclient)]);
+                  [req.body.mailclient, req.body.nameclient, passmail, req.body.typemail, req.body.hostmail, parseInt(req.body.portmail), parseInt(req.body.id_mailclient)]);
               }
               return []; // user not found, so no events*/
           });
@@ -226,7 +234,13 @@ function updateMail(req, res, next) {
     });
 }
 
-
+/**
+ * Pour insérer un mail
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
 function insertMail(req, res, next){
 
   var passmail = crypt.encrypt(req.body.passmail);
@@ -268,11 +282,37 @@ function insertMail(req, res, next){
 }
 
 
+/**
+ * Pour supprimer un client
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+function deleteClient(req, res, next) {
+
+  db.result('DELETE FROM mailclient WHERE id_mailclient = $1', parseInt(req.body.id_mailclient))
+    .then(function (result) {
+      /* jshint ignore:start */
+      res.status(200)
+        .json({
+          status: 'success',
+          message: `Removed ${result.rowCount} mail client`
+        });
+      /* jshint ignore:end */
+    })
+    .catch(function (err) {
+      return next(err);
+    });
+}
+
+
 module.exports = {
     getMailImap : getMailImap,
     getMailPop : getMailPop,
     getAllMail : getAllMail,
     getMail : getMail,
     updateMail : updateMail,
-    insertMail : insertMail
+    insertMail : insertMail,
+    deleteClient : deleteClient
 };

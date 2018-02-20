@@ -50,7 +50,7 @@ export class ClientService {
 
 		this.token = JSON.parse(localStorage.getItem('currentUser'));
 
-		console.log(this.token);
+		//console.log(this.token);
 
 		if(this.token != null){
 
@@ -110,6 +110,29 @@ export class ClientService {
 			.toPromise()
 			.then(response => response.json() as Client)
 			.catch(this.handleError);
+	}
+
+	/**
+	 * Pour supprimer un mail client
+	 * @param  {number}          id_mailclient [description]
+	 * @return {Promise<Client>}               [description]
+	 */
+	deleteClient(id_mailclient: number): Promise<Client> {
+		const url = `${this.api}/deleteclient`;
+
+		this.token = JSON.parse(localStorage.getItem('currentUser'));
+		
+		if(this.token != null){
+
+  			this.headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
+  		
+  			this.options = new RequestOptions({ headers: this.headers_token });
+  		}
+
+		return this.http.post(url, JSON.stringify({ id_mailclient: id_mailclient }), { headers : this.headers_token })
+		.toPromise()
+		.then(response => response.json() as Client)
+		.catch(this.handleError);
 	}
 
 

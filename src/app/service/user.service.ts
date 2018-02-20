@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/toPromise';
-import { Level } from "../service/level";
 import { User } from "../service/user";
 import { Headers, Http, RequestOptions } from '@angular/http';
 
@@ -10,12 +9,12 @@ import { Headers, Http, RequestOptions } from '@angular/http';
 @Injectable()
 export class UserService {
 
-	private host    = window.location.hostname;
+	private host          = window.location.hostname;
 	private token;
-	private headers = new Headers({'Content-Type': 'application/json'});
+	private headers       = new Headers({'Content-Type': 'application/json'});
 	private headers_token = new Headers();
-	private api     = `http://${this.host}:3000/api`;
-	private options = new RequestOptions();
+	private api           = `http://${this.host}:3000/api`;
+	private options       = new RequestOptions();
 
   	constructor(
   		private http: Http//,
@@ -61,19 +60,6 @@ export class UserService {
 	}
 
 	/**
-	 * Pour récupérer tous les level de la table level
-	 * @return {Promise<Level[]>} [description]
-	 */
-	getAllLevel(): Promise<Level[]>{
-		const url = `${this.api}/listlevel`;
-
-		return this.http.get(url)
-			.toPromise()
-			.then(response => { return response.json() as Level[]; })
-			.catch(this.handleError);
-	} 
-
-	/**
 	 * Pour récupérer un utilisateur avec son ID
 	 * @param  {number}        id [id_user]
 	 * @return {Promise<User>}    [attente d'un utilisateur]
@@ -83,7 +69,7 @@ export class UserService {
 
 		this.token = JSON.parse(localStorage.getItem('currentUser'));
 
-		console.log(this.token);
+		//console.log(this.token);
 
 		if(this.token != null){
 
@@ -141,6 +127,29 @@ export class UserService {
 			.toPromise()
 			.then(response => response.json() as User)
 			.catch(this.handleError);
+	}
+
+	/**
+	 * Pour supprimer un utilisateur
+	 * @param  {number}        id_user [description]
+	 * @return {Promise<User>}         [description]
+	 */
+	deleteUser(id_user : number): Promise<User> {
+		const url = `${this.api}/deleteuser`;
+
+		this.token = JSON.parse(localStorage.getItem('currentUser'));
+		
+		if(this.token != null){
+
+  			this.headers_token = new Headers({'Content-Type': 'application/json', 'Authorization': 'Bearer ' + this.token.token, 'X-access-token' : this.token.token });
+  		
+  			this.options = new RequestOptions({ headers: this.headers_token });
+  		}
+
+		return this.http.post(url, JSON.stringify({ id_user: id_user }), { headers : this.headers_token })
+		.toPromise()
+		.then(response => response.json() as User)
+		.catch(this.handleError);
 	}
 
 	/**

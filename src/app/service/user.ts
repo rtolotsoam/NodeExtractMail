@@ -5,5 +5,6 @@ export class User {
 	password : string;
 	level : string;
 	prenom : string;
+	redirect? : string;
 	idlevel? : number; 
 }

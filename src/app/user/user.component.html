@@ -82,7 +82,7 @@
                                             </ng-template>
                                             <ng-template let-row="row" ngx-datatable-cell-template>
                                                 <div style="width : 0 ! important;max-width: 240px; min-width: 220px;">
-                                                    <button type="button" class="btn btn-danger btn-block btn-xs">
+                                                    <button type="button" class="btn btn-danger btn-block btn-xs" (click)="supprimer(row.id_user, row.matricule, row.prenom)">
                                                     	<i class="fa fa-close" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
@@ -99,6 +99,35 @@
             </div>
 
         </div>    
+
+
+        <ngx-smart-modal #supprModal [identifier]="'supprModal'">
+ 
+            <div class="modal-header">
+                <h5 class="modal-title">Suppression d'utilisateur</h5>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">   {{invalidCredentialMsg}}
+                </div>
+                <div *ngIf="supprModal.hasData()">
+                    <span *ngFor="let usr of supprModal.getData()">
+                        Voulez-vous vraiment supprimer l'utilisateur : <span style="color:red;"> {{  usr.data.matricule }} - {{ usr.data.prenom }}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span *ngFor="let usr of supprModal.getData()">
+                    <input type="hidden" #user value="{{ usr.data.id_user }}" />
+                    <button type="button" class="btn btn-danger" (click)="supprimerUser(user.value)">
+                        Supprimer
+                    </button>
+                </span>
+                <button class="btn btn-info" (click)="supprModal.close()">
+                    Annuler
+                </button>
+            </div>
+
+        </ngx-smart-modal>
 
     </div>
 </div>

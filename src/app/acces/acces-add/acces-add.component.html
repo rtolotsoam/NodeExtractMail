@@ -1,0 +1,64 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>	
+
+		<div class="row">	
+			<div class="col-md-offset-3 col-md-6" *ngIf="acces">
+				<div class="panel panel-default">
+					<div class="row">
+						<div class="col-md-12 text-center form-header"  style="margin-top:15px;">
+							<h4>Rattaché des liens au level <span style="color: blue;">{{ level?.name }}</span></h4>
+						</div>
+					</div>
+					<div class="panel-body">
+						<form [formGroup]="accesAddForm" (ngSubmit)="addacces()" novalidate>
+							<div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">{{invalidCredentialMsg}}
+							</div>
+							<div class="row">
+								<div class="col-md-6">
+									<div class="form-group">
+										<label for="lien_id">Choisir les liens</label>
+										<select id="lien_id"
+										class="form-control"
+										formControlName="lien_id" multiple size="{{ lien?.length }}">
+											<option *ngFor="let ln of lien" 
+											[value]="ln.id_lien">
+							                 	{{ ln.path }}
+							               	</option>
+										</select>
+										<div [hidden]="accesAddForm.get('lien_id').valid || accesAddForm.get('lien_id').untouched" class="alert alert-danger">
+											Le champs est obligatoire
+										</div>
+		 							</div>
+		 						</div>	
+		 						<div class="col-md-6">	
+		 							<div class="form-group">
+										<label>Voici les liens déjà rattachés au level</label>
+										<select class="form-control" multiple disabled size="{{ lien?.length }}">
+											<option *ngFor="let lnLv of lienLevel">
+							                 	{{ lnLv.path }}
+							               	</option>
+										</select>
+		 							</div>
+	 							</div>
+ 							</div>
+							<div class="form-group">
+								<button class="btn btn-success"
+								type="submit"
+								[disabled]="!accesAddForm.valid">Ajouter
+								</button>
+								<button type="button" class="btn btn-default" (click)="goBack()">Annuler</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>	

@@ -1,0 +1,118 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>   
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="box-widget widget-module">
+                        <div class="widget-head clearfix">
+                            <span class="h-icon"><i class="fa fa-sort-amount-desc"></i></span>
+                            <h4>Tous les level</h4>
+                            <button class="btn btn-success pull-right" style="margin-top:0.8%; margin-right: 2%;" routerLink="/addlevel">
+                                Ajouter un level
+                            </button>
+                        </div>
+
+                        <div class="widget-container">
+                            <div class=" widget-block">
+                            
+                                    <ngx-datatable 
+                                    	class="bootstrap table striped expandable"
+                                    	[rows]="level"
+                                    	[loadingIndicator]="loadingIndicator"
+                                    	[columnMode]="'force'"
+                                    	[headerHeight]="40"
+                                        [footerHeight]="40"
+                                    	[limit]="10"
+                                    	[rowHeight]="'auto'"
+                                    	[reorderable]="reorderable">
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Nom du level
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.name}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Redirection après l'authentification
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.redirect}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Modifier
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="margin-right: 2px;">
+                                                    <button type="button" class="btn btn-primary btn-block btn-xs" (click)="updateLevel(row.id_level)">
+                                                    	<i class="fa fa-edit" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Supprimer
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                            	<div style="margin-right: 12px;">
+                                                    <button type="button" class="btn btn-danger btn-block btn-xs" (click)="supprimer(row.id_level, row.name)">
+                                                    	<i class="fa fa-close" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+
+                                </div>
+                            </div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <ngx-smart-modal #supprModal [identifier]="'supprModal'">
+ 
+            <div class="modal-header">
+                <h5 class="modal-title">Suppression d'un level</h5>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">   {{invalidCredentialMsg}}
+                </div>
+                <div *ngIf="supprModal.hasData()">
+                    <span *ngFor="let lv of supprModal.getData()">
+                        Voulez-vous vraiment supprimer un level : <span style="color:red;"> {{  lv.data.name }}</span>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span *ngFor="let lv of supprModal.getData()">
+                    <input type="hidden" #level value="{{ lv.data.id_level }}" />
+                    <button type="button" class="btn btn-danger" (click)="supprimerLevel(level.value)">
+                        Supprimer
+                    </button>
+                </span>
+                <button class="btn btn-info" (click)="supprModal.close()">
+                    Annuler
+                </button>
+            </div>
+
+        </ngx-smart-modal>     
+
+    </div>
+</div>

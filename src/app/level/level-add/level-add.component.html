@@ -1,0 +1,63 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>	
+
+		<div class="row">	
+			<div class="col-md-offset-3 col-md-6" *ngIf="level">
+				<div class="panel panel-default">
+					<div class="row">
+						<div class="col-md-12 text-center form-header"  style="margin-top: 15px;">
+							<h4>Ajouter un nouveau level</h4>
+						</div>
+					</div>
+					<div class="panel-body">
+						<form [formGroup]="levelAddForm"
+							(ngSubmit)="add()"
+							novalidate>
+							<div *ngIf="invalidCredentialMsg" class="alert alert-danger 	text-center">{{invalidCredentialMsg}}
+							</div>
+							<div class="form-group">
+								<label for="name">Nom du level</label>
+								<input id="name" 
+								type="text"
+								class="form-control" 
+								formControlName="name" autocomplete="off">
+								<div [hidden]="levelAddForm.get('name').valid || levelAddForm.get('name').untouched" class="alert alert-danger">
+									Le nom du level est requis et doit contenir au maximum 50 caractéres, au minimum 3 caractéres.
+								</div>
+							</div>
+							<div class="form-group">
+								<label for="redirect">Choisir la redirection après authentification</label>
+								<select id="redirect" 
+								class="form-control"
+								formControlName="redirect">
+									<option value="" disabled>Merci de choisir parmi les options</option>
+									<option *ngFor="let ln of lien" 
+									[value]="ln.path">
+					                 	{{ ln.path }}
+					               	</option>
+								</select>
+								<div [hidden]="levelAddForm.get('redirect').valid || levelAddForm.get('redirect').untouched" class="alert alert-danger">
+									Le champ de redirection est obligatoire
+								</div>
+							</div>
+							<div class="form-group">
+								<button class="btn btn-success"
+								type="submit"
+								[disabled]="!levelAddForm.valid">Ajouter
+								</button>
+								<button type="button" class="btn btn-default" (click)="goBack()">Annuler</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</div>	

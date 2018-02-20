@@ -1,0 +1,77 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>   
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="box-widget widget-module">
+                        <div class="widget-head clearfix">
+                            <span class="h-icon"><i class="fa fa-gears"></i></span>
+                            <h4>Tous les accès</h4>
+                        </div>
+
+                        <div class="widget-container">
+                            <div class=" widget-block">
+                            
+                                    <ngx-datatable 
+                                    	class="bootstrap table striped expandable"
+                                    	[rows]="level"
+                                    	[loadingIndicator]="loadingIndicator"
+                                    	[columnMode]="'force'"
+                                    	[headerHeight]="40"
+                                        [footerHeight]="40"
+                                    	[limit]="10"
+                                    	[rowHeight]="'auto'"
+                                    	[reorderable]="reorderable">
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Nom du level
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.name}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Rattaché des liens au level
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <div style="margin-right: 2px;">
+                                                    <button type="button" class="btn btn-primary btn-block btn-xs" (click)="rattachLien(row.id_level)">
+                                                    	<i class="fa fa-plus" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: center;">
+                                                    Voir détail
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                            	<div style="margin-right: 12px;">
+                                                    <button type="button" class="btn btn-info btn-block btn-xs" (click)="detailAcces(row.id_level)">
+                                                    	<i class="fa fa-list" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+
+                                </div>
+                            </div>
+
+                </div>
+            </div>
+
+        </div>    
+
+    </div>
+</div>

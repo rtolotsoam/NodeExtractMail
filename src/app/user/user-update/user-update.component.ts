@@ -4,6 +4,7 @@ import { User } from '../../service/user';
 import { Level } from '../../service/level';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { UserService } from "../../service/user.service";
+import { LevelService } from "../../service/level.service";
 import { Location } from '@angular/common';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
@@ -21,11 +22,14 @@ export class UserUpdateComponent implements OnInit {
     level: Level;
     invalidCredentialMsg : String;
   	
-  	constructor(private userService: UserService,
-              	private router: Router,
-              	private route: ActivatedRoute,
-              	private location: Location,
-              	private formBuilder: FormBuilder) { }
+  	constructor(
+        private userService: UserService,
+      	private router: Router,
+      	private route: ActivatedRoute,
+      	private location: Location,
+      	private formBuilder: FormBuilder,
+        private levelService : LevelService
+    ) { }
 
   	ngOnInit(): void {
   		this.route.params
@@ -53,7 +57,7 @@ export class UserUpdateComponent implements OnInit {
   		this.userService.update(user)
   		.then(response => { 
             if(response['status'] == 'error'){
-              this.invalidCredentialMsg = 'Merci de modifier le matricule ou le mot de passe, car il y a risque de doublon !';
+              this.invalidCredentialMsg = 'Merci de réessayer plus tard, car la base de données est indisponible !';
             }else if(response['status'] == 'success'){
                 this.router.navigate(['/user']);
             }else{
@@ -63,7 +67,7 @@ export class UserUpdateComponent implements OnInit {
   	}
 
     getLevel(): void{
-      this.userService.getAllLevel()
+      this.levelService.getAllLevel()
       .then(level => { this.level = level['data'] });
     }
 

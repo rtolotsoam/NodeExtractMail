@@ -82,7 +82,7 @@
                                             </ng-template>
                                             <ng-template let-row="row" ngx-datatable-cell-template>
                                                 <div style="width : 0 ! important;max-width: 240px; min-width: 220px;">
-                                                    <button type="button" class="btn btn-danger btn-block btn-xs">
+                                                    <button type="button" class="btn btn-danger btn-block btn-xs" (click)="supprimer(row.id_mailclient, row.mailclient, row.nameclient)">
                                                     	<i class="fa fa-close" aria-hidden="true"></i>
                                                     </button>
                                                 </div>
@@ -98,7 +98,40 @@
                 </div>
             </div>
 
-        </div>    
+        </div> 
+
+
+        <ngx-smart-modal #supprModal [identifier]="'supprModal'">
+ 
+            <div class="modal-header">
+                <h5 class="modal-title">Suppression d'un mail client</h5>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">   {{invalidCredentialMsg}}
+                </div>
+                <div *ngIf="supprModal.hasData()">
+                    <span *ngFor="let cli of supprModal.getData()">
+                        Voulez-vous vraiment supprimer le mail client : <br/>
+                        <ul>
+                            <li>Le client :<span style="color:red;"> {{  cli.data.nameclient }}</span></li>
+                            <li>Mail du client :<span style="color:red;"> {{  cli.data.mailclient }}</span></li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span *ngFor="let cli of supprModal.getData()">
+                    <input type="hidden" #client value="{{ cli.data.id_mailclient }}" />
+                    <button type="button" class="btn btn-danger" (click)="supprimerClient(client.value)">
+                        Supprimer
+                    </button>
+                </span>
+                <button class="btn btn-info" (click)="supprModal.close()">
+                    Annuler
+                </button>
+            </div>
+
+        </ngx-smart-modal>    
 
     </div>
 </div>

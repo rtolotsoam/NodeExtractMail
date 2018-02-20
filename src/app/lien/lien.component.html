@@ -1,0 +1,130 @@
+<app-includes></app-includes>
+<div class="main-container">
+    <div class="container-fluid">
+        <div class="page-breadcrumb">
+            <div class="row">
+                <div class="col-md-12"></div>
+            </div>
+        </div>   
+        <div class="row">
+                <div class="col-md-12">
+                    <div class="box-widget widget-module">
+                        <div class="widget-head clearfix">
+                            <span class="h-icon"><i class="fa fa-link"></i></span>
+                            <h4>Tous les liens</h4>
+                            <button class="btn btn-success pull-right" style="margin-top:0.8%; margin-right: 2%;" routerLink="/addlien">
+                                Ajouter un nouveau lien
+                            </button>
+                        </div>
+
+                        <div class="widget-container">
+                            <div class=" widget-block">
+                            
+                                    <ngx-datatable 
+                                    	class="bootstrap table striped expandable"
+                                    	[rows]="lien"
+                                    	[loadingIndicator]="loadingIndicator"
+                                    	[columnMode]="'force'"
+                                    	[headerHeight]="40"
+                                        [footerHeight]="40"
+                                    	[limit]="10"
+                                    	[rowHeight]="'auto'"
+                                    	[reorderable]="reorderable">
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Titre du lien
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.titre}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Chemin d'accès du lien
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                {{row.path}}
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                Icon du lien
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                                <i class="{{row.icon}}"></i>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: right;">
+                                                    Modifier
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                            	<div style="margin-right: 16px">
+                                                    <button type="button" class="btn btn-primary pull-right" (click)="updateLien(row.id_lien)">
+                                                    	<i class="fa fa-edit" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>    
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                        <ngx-datatable-column>
+                                            <ng-template let-column="column" ngx-datatable-header-template>
+                                                <div style="text-align: right;">
+                                                    Supprimer
+                                                </div>
+                                            </ng-template>
+                                            <ng-template let-row="row" ngx-datatable-cell-template>
+                                            	<div style="margin-right: 18px">
+                                                    <button type="button" class="btn btn-danger pull-right" (click)="supprimer(row.id_lien, row.titre, row.path)">
+                                                    	<i class="fa fa-close" aria-hidden="true"></i>
+                                                    </button>
+                                                </div>    
+                                            </ng-template>
+                                        </ngx-datatable-column>
+                                    </ngx-datatable>
+
+                                </div>
+                            </div>
+
+
+
+                </div>
+            </div>
+
+        </div>   
+
+        <ngx-smart-modal #supprModal [identifier]="'supprModal'">
+ 
+            <div class="modal-header">
+                <h5 class="modal-title">Suppression d'un lien</h5>
+            </div>
+            <div class="modal-body">
+                <div *ngIf="invalidCredentialMsg" class="alert alert-danger text-center">   {{invalidCredentialMsg}}
+                </div>
+                <div *ngIf="supprModal.hasData()">
+                    <span *ngFor="let ln of supprModal.getData()">
+                        Voulez-vous vraiment supprimer le lien : <br/>
+                        <ul>
+                            <li>Titre du lien :<span style="color:red;"> {{  ln.data.titre }}</span></li>
+                            <li>Chemin d'accès :<span style="color:red;"> {{  ln.data.path }}</span></li>
+                        </ul>
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <span *ngFor="let ln of supprModal.getData()">
+                    <input type="hidden" #lien value="{{ ln.data.id_lien }}" />
+                    <button type="button" class="btn btn-danger" (click)="supprimerLien(lien.value)">
+                        Supprimer
+                    </button>
+                </span>
+                <button class="btn btn-info" (click)="supprModal.close()">
+                    Annuler
+                </button>
+            </div>
+
+        </ngx-smart-modal> 
+
+    </div>
+</div>

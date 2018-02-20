@@ -12,11 +12,17 @@ export class AuthGuardService implements CanActivate, CanActivateChild{
 
   canActivate(route : ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
   		let url: string = state.url;
-  		console.log('Url : '+ url);
-
+  		//console.log('Url : '+ url);
+      //console.log("login : "+this.authService.isUserLoggedIn());
+      //console.log("session : "+localStorage.getItem('currentUser'));
   		if(this.authService.isUserLoggedIn() && localStorage.getItem('currentUser')){
-  			return true;
-  		}
+  			//console.log("logged");
+        return true;
+  		}else if(localStorage.getItem('currentUser')){
+        //console.log("logged");
+        return true;
+      }
+      //console.log("not logged");
   		this.authService.setRedirectUrl(url);
   		this.router.navigate([ this.authService.getLoginUrl() ]);
   		return false;
@@ -26,7 +32,7 @@ export class AuthGuardService implements CanActivate, CanActivateChild{
 
       let loggedInUser = this.authService.getLoggedInUser();
 
-      console.log(loggedInUser);
+      //console.log(loggedInUser);
 
       let url: string = state.url;
 

@@ -7,7 +7,7 @@ import { User } from './user';
 export class AuthService {
 
 	private redirectUrl: string;
-	private loginUrl: string = '/login';
+	private loginUrl: string    = '/login';
 	private isloggedIn: boolean = false;
 	private loggedInUser: User;
 	public token: string;
@@ -27,12 +27,7 @@ export class AuthService {
 	 			let token = users['token'];
 	 			
 	 			if(user && token) {
-	 				if(user.level == 'admin'){
-	 					this.redirectUrl = '/user';
-	 				}else{
-	 					this.redirectUrl = '/inbox';
-	 				}
-	 				this.token = token;
+	 				this.redirectUrl = '/'+ user.redirect;
 
 	 				localStorage.setItem('currentUser', JSON.stringify({user : user, token: token}));
 
